@@ -7,7 +7,7 @@
 <b>Discipline | <b> Telecommunications Engineering 
 :--|:--|
 <b> Lab | <b> **Fading Channels and Mobile Communications Virtual Laboratory**
-<b> Experiment|     <b> **Understanding of Pathloss**
+<b> Experiment|     <b> **Calculation of Boundary Coverage Probability**
 
 
 ### About the Experiment 
