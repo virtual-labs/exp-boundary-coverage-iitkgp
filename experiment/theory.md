@@ -1,190 +1,195 @@
 ## Theory
 **Introduction:**  
-The design of a communication system involves selection of values for several parameters. One of the important parameter is the transmit power. Higher transmit power ensures large allowable separation distance between the transmitter (Tx) and receiver (Rx). Of course the loss in signal power per unit distance depends on the properties of the medium. In case of wireless communication on one hand it is desired to have a very large coverage (large allowable separation between Tx and Rx) on the other hand it is also desired that co-channel interference be as low as possible. An understanding of the large scale propagation effects is very important for design of suitable communication system. In terrestrial mobile communication system, electro-magnetic wave propagation is affected by reflection, diffraction and scattering. These lead to dynamic variation of signal strength as a function of time, frequency, distance of separation, antenna height, antenna configuration, local scattering environment etc. Propagation models are necessary in order to predict the received signal strength for a given set of parameters as mentioned above. These models can be broadly considered under:-
 
+The circular coverage region of a Base Station is the area defined by a certain radius R with the Base Station at the center where the mean signal level received at the mobile unit remains above a specified threshold with certain probability. The probability mentioned above is decided based on quality of service requirement. If there is no shadow fading then the radius R can be calculated for a region where the signal level crosses the threshold with certainty.
 
-- Large scale Fading Model.
+However in real conditions, shadow fading plays an important role in cellular network design. Due to the random variation of the signal strength received owing to shadow fade, one needs to find the probability with which received signal strength crosses the predicted threshold. The detail derivation in the context of % boundary coverage and% area coverage are given below:
 
-- Small Scale Fading Model.
+### 1.1 % Boundary Coverage:-
 
-### 1.1 Large Scale Fading:-
+The received signal power in log domain at a distance d from the Base Station is given by:
 
-Large Scale Fading is dealt by propagation models that predict the mean received signal strength for an arbitrary transmitter receiver separation. The large scale fading model gives such an average with measurements across $4\lambda$ to $40\lambda$, where $\lambda$ is the wavelength. This is useful for estimating coverage area. Large Scale fading can be broadly classified as:-
-- Path Loss.
-- Shadowing.
+$$P_r(d) = \bar{P_r}(d_0) + 10 n_p \log_{10}\left(\frac{d_0}{d}\right) + x_{dB}$$
+
+Where,
+
+- $x_{dB}$ represents shadow fading
+
+- $x_{dB}$ is a random variable with Gaussian probability density function with mean $\bar{P_r}(d)$ and standard deviation $\sigma_{x_{dB}}$.
+
+The probability that the signal level crosses the certain sensitivity level $\gamma$ is given by:
+
+$$\text{Prob}[P_r(d) > \gamma] = \int_{\gamma}^{\infty} p(x)dx$$
+
+$$= 1 - \int_{-\infty}^{\gamma} p(x)dx$$
+
+$$= 1 - \text{Prob}[P_r(d) < \gamma]$$
+
+$$= 1 - F_{P_r}(\gamma)$$
+
+$$= 1 - \left[\frac{1}{2} + \frac{1}{2}\text{erf}\left(\frac{\gamma - \bar{P_r}(d)}{\sqrt{2}\sigma_{x_{dB}}}\right)\right] = \frac{1}{2}\text{erfc}\left(\frac{\gamma - \bar{P_r}(d)}{\sqrt{2}\sigma_{x_{dB}}}\right)$$
+
+$$= Q\left(\frac{\gamma - \bar{P_r}(d)}{\sigma_{x_{dB}}}\right)$$
+
+### 1.2 % Area Coverage:-
+
+The % area coverage is determined by the radius $R_{\gamma}$ at which the signal level $\gamma$ exceeds the sensitivity level with probability $\text{Prob}_{R_{\gamma}}$ which is the likelihood of coverage at the cell boundary with $d=R_{\gamma}$.
+
+$$\text{Prob}_{R_{\gamma}} = \text{Prob}[P_r(R_{\gamma}) > \gamma]$$
+
+Given that $\text{Prob}[P_r(d) > \gamma]$ ($\text{Prob}_{d\gamma}$) is the probability that the signal in the range $0 < d < R_{\gamma}$ exceeds the sensitivity level, we can associate this with the probability that the level exceeds $\gamma$ within an infinitesimal area dA at the range d.
 
 <div align="center">
     <img src="images/theory1.png" alt="Large Scale Fading">  
       </div>
+      
+The % of useful area covered within the boundary of R with the received signal strength $\ge \gamma$ is:
 
-Large scale fading is heavily affected by power dissipation and effects of the propagation channels. The models assume some path loss at a given distance between Tx and Rx i.e. there is no shadowing. It is useful in getting a quick estimate of the average signal strength, hence the coverage. These models are used for prediction of signal variation across 100m-1000m.
+$$F_u^{\gamma} = \frac{1}{\pi R_{\gamma}^2} \int \text{Prob}[P_r(d) > \gamma] dA$$
 
-There have been ray tracing methods which are complicated and are useful for static scenarios. In case of dynamic scenarios statistical models are used. A statistical model ensures that the statistical properties of the numbers generated using the model matches the recorded values.
+$$= \frac{1}{\pi R_{\gamma}^2} \int_{0}^{R_{\gamma}} \int_{0}^{2\pi} \text{Prob}[P_r(d) > \gamma] r dr d\theta$$
 
-We begin with Friis Free space propagation loss. The received power at a distance 'd' is given by.
+The power received can be referenced to the power received at cell boundary.
 
-$P_r(d) = \frac{P_t G_t G_r \lambda^2}{(4\pi d)^2 L}$       where $G = \frac{4\pi A_e}{\lambda^2}$
+$$\bar{P_r}(d) = \bar{P_r}(d_0) + 10 n_p \log_{10}\left(\frac{d_0}{d}\right)$$
 
-P_t = Transmitter Power.
+$$= \bar{P_r}(d_0) + 10 n_p \log_{10}\left(\frac{d_0}{R_{\gamma}}\right) + 10 n_p \log_{10}\left(\frac{R_{\gamma}}{d}\right) = \bar{P_r}(R_{\gamma}) + 10 n_p \log_{10}\left(\frac{R_{\gamma}}{d}\right)$$
 
-P_r(d) = Received power at a distance 'd'.
+Where,
 
-G_t = Transmit antenna power gain.
+$$\bar{P_r}(d_0) = P_t - \bar{PL}(d_0)$$
 
-G_r = Received antenna power gain.
+We shall use the radial distance r instead of d therefore:
 
-$\lambda$ = Wavelength.
+$$\text{Prob}[P_r(r) > \gamma] = Q\left(\frac{\gamma - \bar{P_r}(r)}{\sigma_{x_{dB}}}\right)$$
 
-A_e = Effective aperture related to the physical size of antenna.
+$$= \frac{1}{2} - \frac{1}{2}\text{erf}\left(\frac{\gamma - \bar{P_r}(r)}{\sqrt{2}\sigma_{x_{dB}}}\right)$$
 
-L>=1 System loss factor not related to propagation.
-Transmission line , Filter losses, Antenna loss etc .
+$$= \frac{1}{2} - \frac{1}{2}\text{erf}\left(\frac{\gamma - \left(\bar{P_r}(d_0) + 10n_p \log_{10}\left(\frac{d_0}{R_{\gamma}}\right) + 10n_p \log_{10}\left(\frac{R_{\gamma}}{r}\right)\right)}{\sqrt{2}\sigma_{x_{dB}}}\right)$$
 
-D = T_x - R_x separation distance.
-P_r decrease as square of distance 20 dB/ decade.
+$$= \frac{1}{2} - \frac{1}{2}\text{erf}\left(\frac{\gamma - \bar{P_r}(R_{\gamma})}{\sqrt{2}\sigma_{x_{dB}}} - \frac{10n_p \log_{10}(r/R_{\gamma})}{\sqrt{2}\sigma_{x_{dB}}}\right)$$
 
-Path loss gives a measure of signal attenation. It is usually measured in dB. It is defined as a difference between the transmitted antenna gains.
+$$\text{Prob}[P_r(r) > \gamma] = \frac{1}{2} - \frac{1}{2}\text{erf}\left(a + b \ln\left(\frac{r}{R_{\gamma}}\right)\right)$$
 
-The path loss for free space model is
+Where:
 
-$PL(\text{dB}) = 10\log_{10}\left(\frac{P_t}{P_r}\right) = -10\log_{10}\left[\frac{G_t G_r \lambda^2}{(4\pi)^2 d^2}\right]$
+$$a = \frac{\gamma - \bar{P_r}(R_{\gamma})}{\sqrt{2}\sigma_{x_{dB}}} = \frac{\gamma - (P_t - \bar{PL}(R_{\gamma}))}{\sqrt{2}\sigma_{x_{dB}}} \quad, \quad b = \frac{10 n_p \log_{10}(e)}{\sqrt{2}\sigma_{x_{dB}}}$$
 
-It may be remembered that Friis free space model is valid for 'd' in the far field of the transmission antenna. The far field / Fraunhofer region is beyond the far field distance, where $d_f = \frac{2D^2}{\lambda}$.
+$$F_u^{\gamma} = \frac{1}{2} - \frac{1}{R_{\gamma}^2} \int_{0}^{R_{\gamma}} r \cdot \frac{1}{2}\text{erf}\left(a + b \ln\left(\frac{r}{R_{\gamma}}\right)\right) dr$$
 
-It is related to the largest linear dimension of the antenna aperture and carrier wavelength. d is the largest linear distance of the antenna. $d_f \gg d$ and $d_f \gg \lambda$ then it is the far field region. For path loss models 'd' can't be 0.
-Therefore a close in distance is used which is known as the received power reference point .Thus $P_r(d)$ for $d>d_0$ may be reference to $P_r(d_0)$ where $P_r(d_0)$ may be predicted from Friis free space propagation loss model. It may also be obtained from measurements by using average of several recordings at distance $d_0$. The distance $d_0 \gg d_f$ but $d_0$ is sufficiently smaller than practical BS-MS distance.
+Making variable substitution $t = a + b \ln(r/R_{\gamma})$, it can shown that:
 
-$P_r(d) = P_r(d_0) \left(\frac{d_0}{d}\right)^2$,     $d \ge d_0 \ge d_f$
+$$F_u^{\gamma} = \frac{1}{2}\left[1 - \text{erf}(a) + e^{\frac{1-2ab}{b^2}}\left(1 - \text{erf}\left(\frac{1-ab}{b}\right)\right)\right]$$
 
-Usually received signal strength is measured in dBm or dBw.
+By choosing the signal level $\gamma$ such that $\bar{P_r}(R_{\gamma}) = \gamma$ (such that a=0), $F_u^{\gamma}$ can be shown to be:
 
-$P_r(d) \text{[dBm]} = 10\log_{10}\left(\frac{P_r(d_0)}{10^{-3} \text{W}}\right) + 20\log_{10}\left(\frac{d_0}{d}\right)$ ,   $d \ge d_0 \ge d_f$
-
-Where $P_r(d_0)$ is in watt.
-
-The Value $d_0$ in 1-2 GHz.
-~1m for indoor condition.
-~100m / 1km for indoor condition.
-
-The received power predicted by path loss models is influenced by
-
-#### Reflection: Reflection occurs when the propagation waves impinge on objects with dimension larger than $\lambda$.
-
-#### Diffraction: Diffraction is caused by sharp irregularities in the path of radio waves. It leads to development of secondary wave fronts, bending of waves. It is caused by objects which are in order in $\lambda$. It depends on geometry of the objects, amplitude, phase and polarization of incident waves.
-
-#### Scattering: Scattering is caused by objects which are smaller than $\lambda$.
-
-Using the famous 2-Ray propagation model [Ref(Rappaport)] . It can be shown that when a transmitter at height $h_t$ transmit with power $P_t$ having antenna gain $G_t$ the receiver signal power at the receiver located at height $h_r$ using an antenna with gain $G_r$ and located at a distance 'd' from the transmitter given by
-
-$P_r = P_t G_t G_r \left(\frac{h_t^2 h_r^2}{d^4}\right)$,    for $d \gg \sqrt{h_t h_r}$
-
-When $\theta_\Delta$ is small (< 0.3rads) $\sin(\theta_\Delta / 2) \approx (\theta_\Delta / 2)$
-
-$\frac{\theta_\Delta}{2} \approx \frac{2\pi h_t h_r}{\lambda d} \rightarrow d > \frac{20\pi h_t h_r}{3\pi} \approx \frac{20 h_t h_r}{\lambda}$
-
-For all above range of d,
-
-$E_{TOT} \approx \frac{2E_0 d_0}{d} \frac{2\pi h_t h_r}{\lambda d} \approx \frac{k}{d^2} \text{ V/m}$
-
-k is related to $E_0$, antenna heights and $\lambda$
-
-Power received is proportional to square of electric field.
-
-Therefore received power from transmitter at a distance d is
-
-$P_r = P_t G_t G_r \left(\frac{h_t^2 h_r^2}{d^4}\right)$,    for $d \gg \sqrt{h_t h_r}$
-
-Power deceases with fourth power d $\rightarrow$ 40dB / decade
-
-The pathloss for the 2 Ray model is given by
-
-$PL(\text{dB}) = 40\log(d) - (10\log(G_t) + 10\log(G_r) + 20\log(h_t) + 20\log(h_r))$
-
-In general the PL and $d^{-n_r}$ is the pathloss exponent. The value of $n_p$ can be obtained analytically/emperically.
-
-Emperically models have the advantage of taking all factors into account (both known and unknown).It is based on actual field measurement.
-Its disadvantage is that it is valid for only the measured frequency and location. Generally
-
-$\overline{PL}(\text{dB}) = \overline{PL}(d_0) + 10 n_p \log\left(\frac{d}{d_0}\right)$
+$$F_u^{\gamma} = \frac{1}{2}\left[1 + e^{\frac{1}{b^2}}\left(1 - \text{erf}\left(\frac{1}{b}\right)\right)\right]$$
 
 <div align="center">
-    <img src="images/theory2.png" alt="Environment and Pathloss">  
-      <p><strong>Fig. 2. Environment and Pathloss</strong></p>
-</div>
+    <img src="images/theory2.png" alt="Large Scale Fading">  
+      </div>
+      
+### 1.3 Examples:-
 
+1. Given,
 
-Pathloss models are defined for:
+$\bar{P_r}(d_0) = 0 \text{ dBm}$,
 
-1. Indoor office test environment
+$d_0 = 100 \text{ m}$,
 
-$PL = 37 + 30\log_{10}(R) + (18 \times 3 \times n^{(\frac{n+2}{n+1} - 0.46)})$ [dB]
+$n_p = 4.5$,
 
-R = transmitter-receiver Seperation.
+$R_{\gamma} = 3000 \text{ m}$,
 
-n = no. of floor in the path.
+$\text{Prob}_{R_{\gamma}} = 0.65$,
 
-L shall in all cases > free space loss.
+and $\sigma = 6 \text{ dB}$.
 
-2. Outdoor to indoor and pedestrian testr environment(base model)
-   
-$PL = 40\log_{10}(R) + 30\log_{10}(f) - 49$ [dB]
+Find the margin value ($\gamma - \bar{P_r}(R_{\gamma}$)):
 
-R = base station to mobile station deviation [Km],
+First, find the mean received power at the boundary:
 
-f = carrier frequency [MHz], reference 2000 MHz.
+$$\bar{P_r}(R_{\gamma}) = \bar{P_r}(d_0) + 10 n_p \log_{10}\left(\frac{d_0}{R_{\gamma}}\right)$$
 
-3. Vehicular test environment
-   
-$PL = 40(1 - 4 \times 10^{-3} \Delta h_b)\log_{10}(R) - 18\log_{10}(\Delta h_b) + 21\log_{10}(f) + 80$ [dB]
+$$\bar{P_r}(R_{\gamma}) = 0 + 10 \cdot 4.5 \log_{10}\left(\frac{100}{3000}\right)$$
 
-R = base station to mobile station deviation [Km],
+$$= -66.47 \text{ dBm}$$
 
-f = carrier frequency [MHz], reference 2000 MHz.
+Now, use the boundary probability:
 
-$h_b$ = Base station height[m] above average roof top level.
+$$\text{Prob}_{R_{\gamma}} = \text{Prob}[P_r(R_{\gamma}) > \gamma] = \frac{1}{2}\text{erfc}(a) = \frac{1}{2}(1 - \text{erf}(a))$$
 
-Path Loss deals with the propagation loss due to distance between transmitter and receiver while shadowing describes variation in the average signal strength due to varying environmental clutter at different locations.
+$$0.65 = \frac{1}{2}(1 - \text{erf}(a))$$
 
-## This experiment is on Path Loss Models.
+$$1.3 = 1 - \text{erf}(a) \Rightarrow \text{erf}(a) = -0.3$$
 
-### 1.2 Important Formulas:-
+$$\Rightarrow a = -0.2725$$
 
-These two formulas are for calculating the received signal strength and path loss exponent. These two formulas are applicable for EXPT 1A and EXPT 1B.
+Now find $\gamma$ using the definition of $a$:
 
-$P_r(d) = P_r(d_0) + 10 n_p \log_{10}\left(\frac{d_0}{d}\right)$
+$$a = \frac{\gamma - \bar{P_r}(R_{\gamma})}{\sqrt{2}\sigma} \Rightarrow \gamma = a \sqrt{2}\sigma + \bar{P_r}(R_{\gamma})$$
 
-Where,
+$$\gamma = (-0.2725 \cdot \sqrt{2} \cdot 6) + (-66.47)$$
 
-- $P_r(d)$ = received signal strength for a certain Tx-Rx separation distance,
+$$\gamma = -2.31 + (-66.47) = -68.78 \text{ dBm}$$
 
-- d = certain Tx-Rx separation distance in meters,
+The margin is the difference between the required signal $\gamma$ and the mean signal $\bar{P_r}(R_{\gamma})$:
 
-- $P_r(d_0)$ = received signal strength at a close-in-reference-distance,
+$$\text{Margin} = \gamma - \bar{P_r}(R_{\gamma}) = -68.78 - (-66.47) = -2.31 \text{ dB}$$
 
-- $d_0$ = close-in reference distance from transmitter in meters.
+2. Given,
 
-$PL(\text{dB}) = PL(d_0) + 10 n_p \log_{10}\left(\frac{d}{d_0}\right)$
+$\bar{P_r}(d_0) = 0 \text{ dBm}$,
 
-Where,
-$n_p$ = the path loss exponent.
+$d_0 = 100 \text{ m}$,
 
-### 1.3 Advanced Formula:-
+$n_p = 3$,
 
-This advanced formula given below calculates the path loss for a particular application and captures the effect of base station antenna height, receiver antenna height and carrier frequency.
+$R_{\gamma} = 3000 \text{ m}$,
 
-$PL = 10 n_p \log_{10}(d) + 7.8 - 18\log_{10}(h_{BS}) - 18\log_{10}(h_{UT}) + 20\log_{10}(f_c)$
+$\text{Prob}_{R_{\gamma}} = 0.5$,
 
-Where,
+and $\sigma = 9 \text{ dB}$.
 
-- d = Tx-Rx, i.e., Tx and Rx separation distance in meters.
+Find % Area coverage $F_u^{\gamma}$:
 
-- $h_{BS}$ = the base station antenna height in meters.
+First, find $\bar{P_r}(R_{\gamma})$:
 
-- $h_{UT}$ == the user terminal i.e. receiver antenna height in meters.
+$$\bar{P_r}(R_{\gamma}) = 0 + 10 \cdot 3 \log_{10}\left(\frac{100}{3000}\right)$$
 
-- fc is the carrier frequency in GHz.
+$$= -44.3136 \text{ dBm}$$
 
-This formula is applicable for EXPT 1C, 1D, 1E.
+Now find $a$:
+
+$$\text{Prob}_{R_{\gamma}} = 0.5 \Rightarrow 0.5 = \frac{1}{2}(1 - \text{erf}(a)) \Rightarrow \text{erf}(a) = 0 \Rightarrow a = 0$$
+
+(This means $\gamma = \bar{P_r}(R_{\gamma}) = -44.3136 \text{ dBm}$)
+
+Now find $b$:
+
+$$b = \frac{10 n_p \log_{10}(e)}{\sqrt{2}\sigma}$$
+
+$$= \frac{10 \cdot 3 \cdot 0.4343}{\sqrt{2} \cdot 9} = \frac{13.029}{12.726}$$
+
+$$= 1.0238$$
+
+Now, calculate % Area Coverage using the formula for $a=0$:
+
+$$F_u^{\gamma} = \frac{1}{2}\left[1 + e^{\frac{1}{b^2}}\left(1 - \text{erf}\left(\frac{1}{b}\right)\right)\right] \times 100\%$$
+
+$$F_u^{\gamma} = \frac{1}{2}\left[1 + e^{\frac{1}{1.0238^2}}\left(1 - \text{erf}\left(\frac{1}{1.0238}\right)\right)\right] \times 100\%$$
+
+$$F_u^{\gamma} = \frac{1}{2}\left[1 + e^{0.953}\left(1 - \text{erf}(0.9767)\right)\right] \times 100\%$$
+
+$$F_u^{\gamma} = \frac{1}{2}\left[1 + 2.59(1 - 0.8326)\right] \times 100\%$$
+
+$$F_u^{\gamma} = \frac{1}{2}\left[1 + 2.59(0.1674)\right] \times 100\%$$
+
+$$F_u^{\gamma} = \frac{1}{2}\left[1 + 0.4336\right] \times 100\% = 0.7168 \times 100\%$$
+
+$$= 71.68\%$$
+
+So, % area coverage $\approx 71.71\%$
 
  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>    
  
