@@ -44,12 +44,12 @@ Follow the instructions given below to perform the experiments:-
       </div>
       
 - Step 9:- Once you click on the button SAVE in the dialogue box, another dialogue box appears with the message that your report is successfully generated. Click on the button OK in the dialogue box.
-- 
+
 <div align="center">
     <img src="images/instruction6.png" alt="Large Scale Fading">  
       </div>
       
-Step 9:- Now, you can view your pdf report.
+- Step 10:- Now, you can view your pdf report.
 
 <div align="center">
     <img src="images/instruction7.png" alt="Large Scale Fading">  
