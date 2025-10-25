@@ -1,39 +1,117 @@
-{
-  "version": 2.0,
+
+  {
+	  "version": 2.0,
   "questions": [
     {
-      "question": "This is a Sample Question 1?",
-      "answers": {
-        "a": "answer1",
-        "b": "answer2",
-        "c": "answer3",
-        "d": "answer4"
-      },
-      "explanations": {
-        "a": "Explanation 1  <a href='www.google.com'>here</a>",
-        "b": "Explanation 2",
-        "c": "Explanation 2",
-        "d": "Explanation 2"
-      },
-      "correctAnswer": "a",
-      "difficulty": "beginner"
+    "question": "1. If the distance from the transmitter is doubled, and the pathloss exponent is two (like in free space), by how much does the received signal power decrease?",
+    "answers": {
+      "a": "It decreases by half.",
+      "b": "It decreases by a factor of four.",
+      "c": "It doubles.",
+      "d": "It does not change."
     },
-    {
-      "question": "This is a Sample Question 2?",
-      "answers": {
-        "a": "answer1",
-        "b": "answer2",
-        "c": "answer3",
-        "d": "answer4"
-      },
-      "explanations": {
-        "a": "Explanation 1  <a href='www.google.com'>here</a>",
-        "b": "Explanation 2",
-        "c": "Explanation 2",
-        "d": "Explanation 2"
-      },
-      "correctAnswer": "c",
-      "difficulty": "beginner"
-    }
+    "correctAnswer": "b",
+    "difficulty": "medium"
+  },
+  {
+    "question": "2. When comparing two signals, one at a very high carrier frequency and one at a very low carrier frequency, which one will experience more pathloss over the same distance in free space?",
+    "answers": {
+      "a": "The low-frequency signal.",
+      "b": "The high-frequency signal.",
+      "c": "Both will experience the same pathloss.",
+      "d": "It depends on the transmitter power."
+    },
+    "correctAnswer": "b",
+    "difficulty": "medium"
+  },
+  {
+    "question": "3. What is the main purpose of raising the transmitter antenna height on a cellular tower?",
+    "answers": {
+      "a": "To decrease the carrier frequency.",
+      "b": "To reduce interference from other towers.",
+      "c": "To increase the signal's range by clearing obstacles.",
+      "d": "To reduce the transmitter power required."
+    },
+    "correctAnswer": "c",
+    "difficulty": "beginner"
+  },
+  {
+    "question": "4. If you are in a building and your cell phone's received signal strength is weak, what is the most likely reason related to pathloss?",
+    "answers": {
+      "a": "The transmitter power of the base station is too low.",
+      "b": "The carrier frequency is too low.",
+      "c": "The pathloss exponent is very high due to walls and obstructions.",
+      "d": "The transmitter antenna is too high."
+    },
+    "correctAnswer": "c",
+    "difficulty": "medium"
+  },
+  {
+    "question": "5. Which of these factors does *not* directly influence the pathloss calculation, but rather the *final* received signal strength?",
+    "answers": {
+      "a": "Carrier frequency.",
+      "b": "Transmitter antenna height.",
+      "c": "Distance of separation.",
+      "d": "Transmitter power."
+    },
+    "correctAnswer": "d",
+    "difficulty": "medium"
+  },
+  {
+    "question": "6. A pathloss exponent of 4 is measured in a certain environment. What does this high value suggest?",
+    "answers": {
+      "a": "A clear, unobstructed line-of-sight path.",
+      "b": "A signal that is being guided, like in a tunnel.",
+      "c": "A very lossy environment with many reflections and obstructions.",
+      "d": "An environment where signal strength increases with distance."
+    },
+    "correctAnswer": "c",
+    "difficulty": "beginner"
+  },
+  {
+    "question": "7. How does increasing the receiver antenna height, for example, by moving your phone from your pocket to your ear, typically affect the received signal?",
+    "answers": {
+      "a": "It has no effect.",
+      "b": "It significantly increases the pathloss.",
+      "c": "It can slightly improve the signal by reducing local obstructions.",
+      "d": "It changes the carrier frequency."
+    },
+    "correctAnswer": "c",
+    "difficulty": "beginner"
+  },
+  {
+    "question": "8. To calculate the received signal strength, you need the transmitter power and the pathloss. How are they combined?",
+    "answers": {
+      "a": "Transmitter power is added to the pathloss.",
+      "b": "Pathloss is subtracted from the transmitter power.",
+      "c": "Transmitter power is multiplied by the pathloss.",
+      "d": "Transmitter power is divided by the pathloss."
+    },
+    "correctAnswer": "b",
+    "difficulty": "medium"
+  },
+  {
+    "question": "9. A pathloss prediction formula is used primarily to...",
+    "answers": {
+      "a": "Choose the brand of the transmitter.",
+      "b": "Estimate the coverage area and plan a wireless network.",
+      "c": "Calculate the data speed of the connection.",
+      "d": "Determine the physical size of the receiver antenna."
+    },
+    "correctAnswer": "b",
+    "difficulty": "beginner"
+  },
+  {
+    "question": "10. In a real-world city environment, the measured pathloss is almost always...?",
+    "answers": {
+      "a": "Greater than the pathloss predicted by the free-space model.",
+      "b": "Less than the pathloss predicted by the free-space model.",
+      "c": "Exactly equal to the pathloss predicted by the free-space model.",
+      "d": "Zero."
+    },
+    "correctAnswer": "a",
+    "difficulty": "medium"
+  }
+
   ]
 }

@@ -1,39 +1,116 @@
-{
-  "version": 2.0,
+  {
+	  "version": 2.0,
   "questions": [
     {
-      "question": "This is a Sample Question 1?",
-      "answers": {
-        "a": "answer1",
-        "b": "answer2",
-        "c": "answer3",
-        "d": "answer4"
-      },
-      "explanations": {
-        "a": "Explanation 1  <a href='www.google.com'>here</a>",
-        "b": "Explanation 2",
-        "c": "Explanation 2",
-        "d": "Explanation 2"
-      },
-      "correctAnswer": "a",
-      "difficulty": "beginner"
+    "question": "1. What does 'pathloss' fundamentally describe in a wireless communication system?",
+    "answers": {
+      "a": "The signal amplification at the transmitter.",
+      "b": "The reduction in signal power density as it propagates through space.",
+      "c": "The speed of the data being transmitted.",
+      "d": "The total power consumed by the receiver."
     },
-    {
-      "question": "This is a Sample Question 2?",
-      "answers": {
-        "a": "answer1",
-        "b": "answer2",
-        "c": "answer3",
-        "d": "answer4"
-      },
-      "explanations": {
-        "a": "Explanation 1  <a href='www.google.com'>here</a>",
-        "b": "Explanation 2",
-        "c": "Explanation 2",
-        "d": "Explanation 2"
-      },
-      "correctAnswer": "c",
-      "difficulty": "beginner"
-    }
+    "correctAnswer": "b",
+    "difficulty": "beginner"
+  },
+  {
+    "question": "2. If the transmitter power is doubled, what is the expected change in the received signal strength, assuming all other factors are constant?",
+    "answers": {
+      "a": "It will be halved.",
+      "b": "It will be squared.",
+      "c": "It will also double (or increase by 3 dB).",
+      "d": "It will not change."
+    },
+    "correctAnswer": "c",
+    "difficulty": "beginner"
+  },
+  {
+    "question": "3. As the distance between the transmitter and receiver increases, what generally happens to the pathloss?",
+    "answers": {
+      "a": "It decreases.",
+      "b": "It increases.",
+      "c": "It stays the same.",
+      "d": "It becomes zero."
+    },
+    "correctAnswer": "b",
+    "difficulty": "beginner"
+  },
+  {
+    "question": "4. A larger 'pathloss exponent' value typically implies which kind of environment?",
+    "answers": {
+      "a": "An open field with a clear line of sight.",
+      "b": "A dense urban area with many buildings and obstacles.",
+      "c": "A perfect vacuum (free space).",
+      "d": "An environment with no signal loss."
+    },
+    "correctAnswer": "b",
+    "difficulty": "medium"
+  },
+  {
+    "question": "5. In typical propagation models, how does increasing the carrier frequency affect the pathloss for a fixed distance?",
+    "answers": {
+      "a": "It decreases the pathloss.",
+      "b": "It has no effect on the pathloss.",
+      "c": "It increases the pathloss.",
+      "d": "It only affects the signal's speed, not its loss."
+    },
+    "correctAnswer": "c",
+    "difficulty": "medium"
+  },
+  {
+    "question": "6. What is the general effect of increasing the transmitter antenna height on the received signal strength?",
+    "answers": {
+      "a": "It decreases the received signal strength.",
+      "b": "It has no predictable effect.",
+      "c": "It increases the received signal strength, often by clearing obstructions.",
+      "d": "It only changes the signal's frequency."
+    },
+    "correctAnswer": "c",
+    "difficulty": "beginner"
+  },
+  {
+    "question": "7. How does raising the receiver antenna height typically impact the received signal strength?",
+    "answers": {
+      "a": "It generally improves the received signal strength.",
+      "b": "It generally degrades the received signal strength.",
+      "c": "It has no impact on the received signal strength.",
+      "d": "It inverts the phase of the signal."
+    },
+    "correctAnswer": "a",
+    "difficulty": "beginner"
+  },
+  {
+    "question": "8. What is the primary purpose of using a pathloss prediction formula?",
+    "answers": {
+      "a": "To calculate the exact manufacturing cost of a transmitter.",
+      "b": "To estimate the received signal strength at various locations.",
+      "c": "To determine the color of the antenna.",
+      "d": "To measure the speed of light."
+    },
+    "correctAnswer": "b",
+    "difficulty": "medium"
+  },
+  {
+    "question": "9. A pathloss exponent of two is characteristic of what ideal environment?",
+    "answers": {
+      "a": "A dense forest.",
+      "b": "A submarine communication channel.",
+      "c": "An indoor office with many walls.",
+      "d": "Free space, with no obstructions."
+    },
+    "correctAnswer": "d",
+    "difficulty": "medium"
+  },
+  {
+    "question": "10. To find the final received signal strength (in logarithmic units like dBm), the calculated pathloss is typically...",
+    "answers": {
+      "a": "Subtracted from the transmitter power (also in logarithmic units).",
+      "b": "Added to the transmitter power.",
+      "c": "Multiplied by the transmitter power.",
+      "d": "Ignored, as it's not part of the calculation."
+    },
+    "correctAnswer": "a",
+    "difficulty": "medium"
+  }
+
   ]
 }
