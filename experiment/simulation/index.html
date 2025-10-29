@@ -1,727 +1,778 @@
 <!DOCTYPE html>
-<html lang="en"><!--html tag start-->
+<html lang="en">
 <head>
-  <meta charset="utf-8">
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    
-    <title>PMOS Capacitor Band Diagram</title>
-    
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css">
-    
-    <!-- Font Awesome and jQuery UI CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-ui/1.12.1/themes/base/jquery-ui.css">   
-    <link rel="stylesheet" href="adik.css"> 
-    
-    <!-- jQuery -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-    
-    <!-- Bootstrap Bundle JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js"></script>
-    
-    <!-- MathJax for mathematical typesetting -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-AMS_HTML"></script>
-    
-    <!-- Additional Libraries -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/11.2.1/math.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jQuery-Knob/1.2.13/jquery.knob.min.js"></script>
-    <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
-   
-    <script src="./js/jquery.flot.min.js"></script>
-
-
-
-
+    <title>Boundary Coverage Simulation</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
-      body {
-        font-family: Arial, sans-serif;
-        background-color: #f4f4f9;
-        color: #333;
-        margin: 0;
-        padding: 20px;
-      }
-      .form-container {
-        max-width: 1100px;
-        margin: 0 auto;
-        background: #fff;
-        padding: 20px;
-        border-radius: 8px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-      }
-      
-      td {
-        padding: 10px;
-        text-align: right;
-      }
-      td:nth-child(2n) {
-        text-align: left;
-        padding-left: 5px;
-      }
-      input[type="text"] {
-        width: 100px;
-        padding: 5px;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-      }
-      input[type="button"] {
-        padding: 8px 12px;
-        margin: 5px;
-        border: none;
-        border-radius: 4px;
-        background-color: #007bff;
-        color: white;
-        cursor: pointer;
-        transition: background-color 0.3s ease;
-      }
-      input[type="button"]:hover {
-        background-color: #0056b3;
-      }
-      .button-group {
-        text-align: center;
-        margin-top: 20px;
-      }
-      .button-group input[type="button"] {
-        margin: 5px;
-      }
-      .material-buttons {
-        display: flex;
-        justify-content: center;
-        gap: 10px;
-        margin-top: 20px;
-      }
-      .material-buttons input[type="button"] {
-        background-color: #28a745;
-      }
-      .material-buttons input[type="button"]:hover {
-        background-color: #218838;
-      }
-      .voltage-control {
-        text-align: center;
-        margin-top: 20px;
-      }
-      .voltage-control input[type="button"] {
-        background-color: #dc3545;
-      }
-      .voltage-control input[type="button"]:hover {
-        background-color: #c82333;
-      }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+        }
+        .app-container {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #e0f2fe; /* Light blue background like the image */
+        }
+        .main-card {
+            border: 1px solid #93c5fd;
+            box-shadow: none;
+            background-color: #ffffff;
+            overflow: hidden;
+            width: 100%;
+            max-width: 1200px;
+        }
+        .simulation-canvas {
+            background-image: url('https://placehold.co/800x400/9ade74/000?text=Green+Field+Background');
+            background-size: cover;
+            background-position: center;
+            width: 100%;
+            height: 100%;
+        }
+        .info-box, .input-box {
+            background-color: #dbeafe;
+            border: 1px solid #60a5fa;
+            border-radius: 0.25rem;
+            padding: 0.75rem;
+        }
+        .reading-table-container {
+            max-height: 500px;
+            overflow-y: auto;
+            border: 1px solid #60a5fa;
+            border-radius: 0.25rem;
+        }
+        .dialog-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+        }
+        .dialog-box {
+            background-color: #e0f2fe;
+            padding: 2rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            width: 90%;
+            max-width: 500px;
+            border: 1px solid #60a5fa;
+        }
+        .table-header {
+            background-color: #bfdbfe;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
 
-
-      .table-container {
-      max-width: 800px;
-      margin: 0 auto;
-      background: #fff;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    }
-    
-    td {
-      padding: 10px;
-      text-align: left;
-    }
-    td p {
-      margin: 0;
-      display: flex;
-      align-items: center;
-    }
-    td span {
-      margin-left: 5px;
-    }
-    .math {
-      font-family: "Times New Roman", serif;
-      font-style: italic;
-    }
-    .flex-container {
-      display: flex;
-      align-items: center;
-    }
-    .center-text {
-      text-align: center;
-      font-weight: bold;
-      margin: 20px 0;
-    }
-    .value {
-      font-weight: bold;
-      color: #007bff;
-    }
+        /* Styles copied from only expa.html for the simulation window */
+        #simulation-display {
+            background-image: url('bg.png');
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            overflow: hidden;
+            width: 900px;
+            max-width: 900px;
+            height: 158%;
+        }
+        #antenna {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            height: 211px;
+            width: auto;
+            z-index: 10;
+        }
+        #mobile {
+            position: absolute;
+            height: 40px;
+            width: auto;
+            z-index: 20;
+            transform: translate(-50%, -50%);
+            cursor: grab;
+        }
+        #mobile-tooltip {
+            position: absolute;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            white-space: nowrap;
+            pointer-events: none;
+            transform: translate(-50%, -120%);
+            z-index: 30;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        .input-group {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .input-group button {
+            background-color: #bfdbfe;
+            border-radius: 0.25rem;
+            padding: 0.25rem 0.5rem;
+            font-weight: bold;
+        }
     </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://unpkg.com/jspdf-autotable@3.5.25/dist/jspdf.plugin.autotable.js"></script>
+</head>
+<body class="bg-gray-100 p-4">
 
-  </head>
-<body><!--body tag start-->
-    
-    
-   
-	
-    <div class="container p-3 my-5 text-left border"><!--3rd Container under body tag start-->
-      <div class="row"><!--First row under 3rd container start-->
-        <div class="col-md-1"></div><!--First col under 3rd container start& end-->
-        <div class="col-md-10"><!--2nd col under 3rd container start-->
-            <p class="text-center bg-success"> <a class="nav-link" data-bs-toggle="tab"  id="instcontrol" style="background-color:#128BD9"  ><span class=" h3 text-dark"> Instructions </span></a>
-              <div id="inst" style="display:block;height:200px;overflow-y:auto;text-align:justify">
-					
-					<!-- INSRTUCTION START -->
-          <ol>
-    
-            <h4>Input Parameters</h4>
-            <ul>
-              <li><strong>ϕm, ϕs (Work Function of the Metal and Semiconductor):</strong> Enter the values in electron volts (eV).</li>
-              <li><strong>χ (Electron Affinity):</strong> Enter the electron affinity in eV.</li>
-              <li><strong>tox, tox2 (Oxide Thickness):</strong> Enter the oxide thickness in nanometers (nm).</li>
-              <li><strong>εox, εox2 (Dielectric Constants of the Oxides):</strong> Enter the dielectric constants.</li>
-              <li><strong>Eg (Bandgap Energy):</strong> Enter the bandgap energy using the provided formula if needed.</li>
-              <li><strong>Nd (Donor Concentration)</strong> and <strong>Na (Acceptor Concentration):</strong> Enter the concentration values in cm³.</li>
-              <li><strong>T (Temperature):</strong> Enter the operating temperature in Kelvin (K).</li>
-              <li><strong>εsemi (Semiconductor Dielectric Constant):</strong> Enter the value.</li>
-              <li><strong>V (Voltage):</strong> Input the voltage applied across the device.</li>
-              <li><strong>Material Selection (Si, Ge, GaAs):</strong> Choose the material of the semiconductor.</li>
-            </ul>
-  
-            <h4>Submit</h4>
-            <p>Once all parameters are entered, click the <strong>Submit</strong> button to run the simulation.</p>
-  
-            <h4>View Results</h4>
-            <ul>
-              <li><strong>Band Diagram:</strong> Observe the energy levels within the semiconductor, including the conduction band edge, valence band edge, and Fermi level.</li>
-              
-            </ul>
-  
-            <h4>Explore Different Regions</h4>
-            <p>Use the <strong>Accumulation</strong>, <strong>Flatband</strong>, <strong>Depletion</strong>, <strong>Threshold</strong>, and <strong>Inversion</strong> buttons to explore different operational regions of the PMOS transistor.</p>
-  
-            <h4>Additional Notes</h4>
-            <ul>
-              <li>The right side of the screen displays calculated parameters such as the built-in potential (ϕs), maximum depletion width (xP), surface potential (ψs), and threshold voltage (VT).</li>
-              <li>The calculated charge (Q) and electric field (Eox) in the oxide layer are also shown.</li>
-              <li>Make sure to adjust and explore the parameters to see how they affect the band diagram, charge density, and electric field.</li>
-            </ul>
-     
-    </ol>
-				<!-- INSTRUCTION STOP -->	
-					
-		   </div>
-            </p> 
-          </div><!--2nd col under 3rd container end-->
-		  
-        <div class="col-md-1"></div><!--3rd col under 3rd container start& end-->
-      </div><!--First row under 3rd container end-->
-    </div><!--3rd Container under body tag end-->
-	
-   <!--simulation start -->
-   <div>
-    <body style="background-color:white" onload="moscap();"><div id="MathJax_Message" style="display: none;"></div>
-
-
-<style>
-h3 {margin-left:1cm}
-</style>
-
-<script type="text/x-mathjax-config;executed=true">
-  MathJax.Hub.Config({
-    extensions: ["tex2jax.js"],
-    jax: ["input/TeX","output/HTML-CSS"],
-    tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]}
-  });
-</script>
-
-
-<script language="JavaScript">
-
-var Ev = [];  //valence band energy
-// d arrays used for plotting
-var d1 = [];  //Ev
-var d2 = [];  //EF
-var d3 = [];  //Ec
-var d4 = [];  //n
-var d5 = [];  //p
-var d6 = [];  //rho
-var d7 = [];  //Electric field
-
-echarge = 1.60217733E-19;
-kb = 1.380658E-23/echarge;  //eV/K
-
-function moscap() { 
- tox = eval(data.tox.value)*1E-9;
- na = 1E6*eval(data.na.value);
- Va = eval(data.V.value); //applied voltage
- if (Math.abs(Va)<1E-10) {V = 0; data.V.value=0;}
- Nv = 1E6*eval(data.Nv.value);
- Nc = 1E6*eval(data.Nc.value);
- T = eval(data.T.value);
- Eg = eval(data.Eg.value);
- phi_m = eval(data.phi_m.value);
- chi_s = eval(data.chi_s.value);
- document.getElementById('Eg_txt').innerHTML=Eg.toPrecision(3);
- eps = 8.854187817E-12*eval(data.eps.value);
- eps_ox = 8.854187817E-12*eval(data.eps_ox.value);
- ni=Math.sqrt(Nc*Nv*Math.pow(T/300,3))*Math.exp(1.6022E-19*(-Eg)/(2*1.380658E-23*T));
- document.getElementById('ni_txt').innerHTML=(ni/1E6).toPrecision(3);
- Ev0 = kb*T*Math.log(na/Nv); //Ev - EF  far from the oxide
- Ec0 = kb*T*Math.log(ni*ni/(Nc*na)); //EF - Ec far from the oxide
- phi_s = chi_s + Eg + Ev0; // work function of semiconductor 
- document.getElementById('phi_s_txt').innerHTML=(phi_s).toPrecision(3);
- Vfb = phi_m  - phi_s; // flat band voltage
- document.getElementById('Vfb_txt').innerHTML=(Vfb).toPrecision(3);
- VT = 2*tox*Math.sqrt(eps*na*1.380658E-23*T*Math.log(na/ni))/eps_ox+2*kb*T*Math.log(na/ni);  //threshold voltage in depletion approximation
- document.getElementById('VT_txt').innerHTML=(VT+Vfb).toPrecision(3);
- xp = 2*Math.sqrt(eps*kb*T*Math.log(na/ni)/(echarge*na)); // maximum depletion width in depletion approximation
- document.getElementById('xp_txt').innerHTML=(1E6*xp).toPrecision(3);
- cox= eps_ox/tox;
- V = Va - phi_m + phi_s; //zero bias should result in a built-in voltage corresponding to the work function difference
- Es0 = -tox*echarge*na/eps_ox + echarge*na*Math.sqrt(tox*tox/(eps_ox*eps_ox) + 2*(Va - Vfb)/(echarge*na*eps)); //Es from the depletion approximation
- document.getElementById('Es0_txt').innerHTML=Es0.toPrecision(3);
- VIB0 = eps*Es0*Es0/(2*echarge*na);  //V_IB from the depletion approximation
- document.getElementById('VIB0_txt').innerHTML=VIB0.toPrecision(3);
-
-
-/* This section starts with somewhat arbitray initial conditions for Ev(x) and its derivative
-   dEv(x)/dx inside the bulk of the semiconductor and then integrates the Possion equation
-   to the left to calculate the voltage at the semiconductor/oxide interface and then the 
-   voltage at the gate. The calculated voltage at the gate is compared to the desired voltage at the gate 
-   the initial conditions are adjusted to get the calculated value closer to the desired value.
-*/
-  xr = 3.6*xp;   //right position for binary search
-  xm = 1.8*xp; //middle position for binary search
-  xl = 0;      //left position for binary search
-  for (j=0; j<16; j++) {
-    Ev = Ev0;
-    dEvdx = 0;
-    if (V>0) {dEvdx = 1e3; } 
-    if (V<0) {dEvdx = -1e3; } 
-    dx = xm/300;
-    for (i=0; i<301; i++) { //numerical integration using the midpoint method
-      x = xm*(1-i/300);
-      Ev_mid = Ev - dEvdx*dx/2;  //Ev at the midpoint
-      rho_mid = -na - Nc*Math.exp(-(Eg+Ev_mid)/(kb*T)) + Nv*Math.exp(Ev_mid/(kb*T));
-      dEvdx_mid = dEvdx - echarge*rho_mid*0.5*dx/eps;
-      Ev = Ev - dEvdx_mid*dx;
-      dEvdx = dEvdx - echarge*rho_mid*dx/eps;
-    }
-    Vs = Ev0 - Ev;
-    Es = dEvdx;
-    Eox = Es*eps/eps_ox;
-    Vtmp = Vs + Eox*tox;
-
-//binary search
-    if (V<0) {  
-      if (Vtmp > V) {xl = xm; xm = (xr + xl)/2; }
-      if (Vtmp < V) {xr = xm; xm = (xr + xl)/2; } 
-    }
-    else {
-      if (Vtmp < V) {xl = xm; xm = (xr + xl)/2; }
-      if (Vtmp > V) {xr = xm; xm = (xr + xl)/2; } 
-    }
-
-  } // end j
-
-/* This section solves the Possion equation one more time using the optimized initial conditions
-   and saves the data in arrays so it can be plotted.
-*/
-    Ev = Ev0;
-    dEvdx = 0;
-    if (V>0) {dEvdx = 1e3; } 
-    if (V<0) {dEvdx = -1e3; } 
-    dx = xm/300;
-    for (i=0; i<301; i++) { //numerical integration using the midpoint method
-      x = xm*(1-i/300);
-      Ev_mid = Ev - dEvdx*dx/2;  //Ev at the midpoint
-      rho_mid = -na - Nc*Math.exp(-(Eg+Ev_mid)/(kb*T)) + Nv*Math.exp(Ev_mid/(kb*T));
-      dEvdx_mid = dEvdx - echarge*rho_mid*0.5*dx/eps;
-      Ev = Ev - dEvdx_mid*dx;
-      dEvdx = dEvdx - echarge*rho_mid*dx/eps;
-
-      d1[i] = [1E6*x,Ev];
-      d3[i] = [1E6*x,Ev+Eg];
-      n = Nc*Math.exp(-(Eg+Ev)/(kb*T))/1E21;
-      p = Nv*Math.exp(Ev/(kb*T))/1E21
-      d4[i] = [1E6*x,n];
-      d5[i] = [1E6*x,p];
-      d6[i] = [1E6*x,p-n-na/1E21];
-      d7[i] = [1E6*x,dEvdx*1E-6];
-    }
-    d4[301] = [0,0]; d4[302] = [-1E6*(0.25*xp+tox),0];
-    d5[301] = [0,0]; d5[302] = [-1E6*(0.25*xp+tox),0];
-    d6[301] = [0,0]; d6[302] = [-1E6*tox,0]; d6[303] = [-1E6*tox,-d6[300][1]];  d6[304] = [-1E6*(tox-xm/100),-0.92*d6[300][1]]; 
-    d6[305] = [-1E6*(tox+xm/100),-0.92*d6[300][1]]; d6[306] = [-1E6*tox,-d6[300][1]]; d6[307] = [-1E6*tox,0]; d6[308] = [-1E6*(0.25*xp+tox),0];
-    d2[0] = [1E6*xm,0];
-    d2[1] = [0,0];
-    VIB = Ev0 - Ev;
-    Es = dEvdx;
-    Eox = Es*eps/eps_ox;
-    Q = -Es*eps; //the charge on the semiconductor
-    d7[301] = [0,Eox*1E-6]; d7[302]=[-tox*1E6,Eox*1E-6];  d7[303] = [-tox*1E6,0]; d7[304] = [-1E6*(0.25*xp+tox),0];
-    Vtmp = VIB + Eox*tox;
-    d2[3] = null;
-    d2[4] = [-1E6*tox,-Va];
-    d2[5] = [-1E6*(0.25*xp+tox),-Va];
-    d3[301] = [0,d3[300][1]+1];
-    d3[302] = [-1E6*tox,d3[300][1]+1- Eox*tox];
-    d3[303] = [-1E6*tox,-Vtmp];
-    d1[301] = [0,d1[300][1]-1];
-    d1[302] = [-1E6*tox,d1[300][1]-1- Eox*tox];
-    d1[303] = [-1E6*tox,-Vtmp];
-    if (V==0) { //
-      d1[0] = [1E6*xp,Ev0]; d2[0] = [1E6*xp,0]; d3[0] = [1E6*xp,Ev0+Eg];
-      d4[0] = [1E6*xp,0]; d5[0] = [1E6*xp,na/1E21]; d6[0] = [1E6*xp,0]; 
-      d7.length = 0;
-      d7[0] = [1E6*xp,0]; d7[1] = [-1E6*(0.25*xp+tox),0];
-    }
-
-  document.getElementById('Vs_txt').innerHTML=(VIB).toPrecision(3);
-  document.getElementById('Vtmp_txt').innerHTML=(Vtmp + phi_m - phi_s).toPrecision(3);
-  document.getElementById('Q_txt').innerHTML=(Q).toPrecision(3);
-  document.getElementById('n0_txt').innerHTML=(d4[300][1]).toPrecision(3);
-  document.getElementById('Eox_txt').innerHTML=(Eox).toPrecision(3); 
-  document.getElementById('Es_txt').innerHTML=(Es).toPrecision(3); 
-
-//plot bands
-     // Define data for the plot
-     var data1 = [ 
-    { data: d3, color: "rgb(255,0,0)", shadowSize: 0, lines: { show: true, lineWidth: 2 }, points: { show: true, radius: 3, fill: true, fillColor: "rgb(255,0,0)" }, label: "E<sub>c</sub>" },
-    { data: d1, color: "rgb(0,255,255)", shadowSize: 0, lines: { show: true, lineWidth: 2 }, points: { show: true, radius: 3, fill: true, fillColor: "rgb(0,255,255)" }, label: "E<sub>v</sub>" },
-    { data: d2, color: "rgb(255,165,0)", shadowSize: 0, lines: { show: true, lineWidth: 2 }, points: { show: true, radius: 3, fill: true, fillColor: "rgb(255,165,0)" }, label: "E<sub>F</sub>" }
-];
-
-// Plot the graph
-var plot = $.plot($("#placeholder1"), data1, {
-    grid: { hoverable: true, clickable: true },
-    xaxis: { axisLabel: "Voltage (V)" },
-    yaxis: { axisLabel: "Energy Levels" }
-});
-
-$("#placeholder1").bind("plothover", function (event, pos, item) {
-    if (item) {
-        $("#tooltip").html(item.series.label + "<br>V: " + item.datapoint[0].toFixed(2) + " V<br>E: " + item.datapoint[1].toFixed(2))
-            .css({ top: item.pageY + 5, left: item.pageX + 5 })
-            .fadeIn(200);
-    } else {
-        $("#tooltip").hide();
-    }
-});
-
-$(document).ready(function () {
-    $("body").append("<div id='tooltip' style='position: absolute; display: none; border: 1px solid #ccc; background: #fff; padding: 5px; font-size: 12px;'></div>");
-});
-
-
-
-
-
-
-MathJax.Hub.Queue(['Typeset',MathJax.Hub]);  //have Mathjax process the plot legends that were redrawn
-}
-
-</script>
-
-
-<style>
-p {margin-left:1cm; margin-right:1cm;}
-p.t {margin-left:0cm; margin-right:0cm;}
-h2 {margin-left:1cm;}
-</style>
-
-  
-  
-
-
-<div class="form-container">
-  <form name="data">
-    <table>
-      <tr>
-        <td><math xmlns="http://www.w3.org/1998/Math/MathML"><msub><mi>ϕ</mi><mi>m</mi></msub></math> =</td>
-        <td><input type="text" name="phi_m" size="10" value="4.08" spellcheck="false"></td>
-        <td>eV</td>
-        <td><math xmlns="http://www.w3.org/1998/Math/MathML"><msub><mi>χ</mi><mi>s</mi></msub></math> =</td>
-        <td><input type="text" name="chi_s" size="10" value="4.05" spellcheck="false"></td>
-        <td>eV</td>
-      </tr>
-      <tr>
-        <td><math xmlns="http://www.w3.org/1998/Math/MathML"><msub><mi>t</mi><mrow><mi>o</mi><mi>x</mi></mrow></msub></math> =</td>
-        <td><input type="text" name="tox" size="10" value="3" spellcheck="false"></td>
-        <td>nm</td>
-        <td><math xmlns="http://www.w3.org/1998/Math/MathML"><msub><mi>ϵ</mi><mrow><mi>o</mi><mi>x</mi></mrow></msub></math> =</td>
-        <td><input type="text" name="eps_ox" size="10" value="4" spellcheck="false"></td>
-        <td></td>
-        <td><math xmlns="http://www.w3.org/1998/Math/MathML"><msub><mi>N</mi><mi>c</mi></msub><mo>(</mo><mn>300</mn><mo>)</mo></math> =</td>
-        <td><input type="text" name="Nc" size="10" value="2.78E19" spellcheck="false"></td>
-        <td>1/cm³</td>
-        <td><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>T</mi></math> =</td>
-        <td><input type="text" name="T" size="10" value="300" spellcheck="false"></td>
-        <td>K</td>
-      </tr>
-      <tr>
-        <td><math xmlns="http://www.w3.org/1998/Math/MathML"><msub><mi>E</mi><mi>g</mi></msub></math> =</td>
-        <td><input type="text" name="Eg" size="25" value="1.166-4.73E-4*T*T/(T+636)" spellcheck="false"></td>
-        <td>eV</td>
-        <td><math xmlns="http://www.w3.org/1998/Math/MathML"><msub><mi>ϵ</mi><mrow><mi>s</mi><mi>e</mi><mi>m</mi><mi>i</mi></mrow></msub></math> =</td>
-        <td><input type="text" name="eps" size="10" value="12" spellcheck="false"></td>
-        <td></td>
-        <td><math xmlns="http://www.w3.org/1998/Math/MathML"><msub><mi>N</mi><mi>v</mi></msub><mo>(</mo><mn>300</mn><mo>)</mo></math> =</td>
-        <td><input type="text" name="Nv" size="10" value="9.84E18" spellcheck="false"></td>
-        <td>1/cm³</td>
-        <td><math xmlns="http://www.w3.org/1998/Math/MathML"><msub><mi>N</mi><mi>A</mi></msub></math> =</td>
-        <td><input type="text" name="na" size="10" value="1E17" spellcheck="false"></td>
-        <td>1/cm³</td>
-      </tr>
-    </table>
-
-    <div class="button-group">
-      <div class="voltage-control">
-        <math xmlns="http://www.w3.org/1998/Math/MathML"><mi>V</mi></math> = 
-        <input type="text" name="V" size="10" value="0" spellcheck="false"> V 
-        <input type="button" value="-" onclick="data.V.value = (parseFloat(data.V.value) - 0.01).toFixed(2); moscap();">
-        <input type="button" value="+" onclick="data.V.value = (parseFloat(data.V.value) + 0.01).toFixed(2); moscap();">
-      </div>
-      <input type="button" value="Submit" onclick="moscap();">
+    <div id="custom-dialog" class="dialog-overlay hidden">
+        <div class="dialog-box">
+            <h3 id="dialog-title" class="text-xl font-bold mb-4"></h3>
+            <p id="dialog-message" class="text-gray-700 mb-6"></p>
+            <input type="text" id="dialog-input" class="w-full rounded-md border-gray-300 shadow-sm p-2 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50 hidden mb-6" placeholder="Your Name">
+            <div class="flex justify-end space-x-2">
+                <button id="dialog-ok" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">OK</button>
+                <button id="dialog-cancel" class="bg-gray-300 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-400 hidden">Cancel</button>
+            </div>
+        </div>
     </div>
 
-    <div class="material-buttons">
-      <input type="button" value=" Si " onclick="setMaterial('Si');">
-      <input type="button" value=" Ge " onclick="setMaterial('Ge');">
-      <input type="button" value="GaAs" onclick="setMaterial('GaAs');">
-    </div>
+    <div id="app" class="app-container p-4 sm:p-6 lg:p-8">
+        <div class="main-card bg-white rounded-xl overflow-hidden p-4 sm:p-6">
+            <div class="grid grid-cols-[1fr_2.5fr_1fr] md:grid-cols-[1fr_2.5fr_1fr] gap-6 h-[80vh]">
+                <div id="control-panel" class="md:col-span-1 p-4 space-y-4 flex flex-col justify-between">
+                    <div id="start-screen" class="space-y-4 text-center">
+                        <h3 class="text-xl font-semibold">Instructions</h3>
+                        <p class="text-gray-600">Click the button below to start the experiment. You will be asked to enter your name.</p>
+                        <button id="start-btn" class="w-full bg-blue-500 text-white font-bold py-3 rounded-lg hover:bg-blue-600 transition duration-300">START</button>
+                    </div>
 
-    <div class="button-group">
-      <input type="button" value="Accumulation" onclick="setVoltage(Vfb - 0.2);">
-      <input type="button" value="Flatband" onclick="setVoltage(Vfb);">
-      <input type="button" value="Depletion" onclick="setVoltage(0.5 * (VT + 2 * Vfb));">
-      <input type="button" value="Threshold" onclick="setVoltage(VT + Vfb);">
-      <input type="button" value="Inversion" onclick="setVoltage(VT + Vfb + 0.2);">
-    </div>
-  </form>
-</div>
+                    <div id="main-controls" class="space-y-4 flex flex-col justify-between h-full hidden">
+                        
+                        <div class="overflow-y-auto">
+                            
+                            <div class="input-box space-y-2 mb-4">
+                                <label class="block text-sm font-medium text-gray-700">Distance(m):</label>
+                                <div class="input-group">
+                                    <button onclick="decrementInput('dist-input', 100)">-</button>
+                                    <input id="dist-input" type="text" value="3000" class="w-full rounded-md border-gray-300 shadow-sm p-1">
+                                    <button onclick="incrementInput('dist-input', 100)">+</button>
+                                </div>
+                                <label class="block text-sm font-medium text-gray-700">Pt(dBm):</label>
+                                <div class="input-group">
+                                    <button onclick="decrementInput('tx-power-input', 1.0)">-</button>
+                                    <input id="tx-power-input" type="text" value="30.0" class="w-full rounded-md border-gray-300 shadow-sm p-1">
+                                    <button onclick="incrementInput('tx-power-input', 1.0)">+</button>
+                                </div>
+                                <label class="block text-sm font-medium text-gray-700">fc(GHz):</label>
+                                <div class="input-group">
+                                    <button onclick="decrementInput('fc-input', 0.1)">-</button>
+                                    <input id="fc-input" type="text" value="2.0" class="w-full rounded-md border-gray-300 shadow-sm p-1">
+                                    <button onclick="incrementInput('fc-input', 0.1)">+</button>
+                                </div>
+                                <label class="block text-sm font-medium text-gray-700">Path Loss Exp (np):</label>
+                                <div class="input-group">
+                                    <button onclick="decrementInput('np-input', 0.1)">-</button>
+                                    <input id="np-input" type="text" value="3.0" class="w-full rounded-md border-gray-300 shadow-sm p-1">
+                                    <button onclick="incrementInput('np-input', 0.1)">+</button>
+                                </div>
+                                <button id="reset-btn" class="w-full bg-gray-400 text-white font-bold py-1 rounded-lg hover:bg-gray-500">Reset</button>
+                            </div>
+                            <div class="info-box space-y-2 mb-4 hidden" id="calculated-values-box">
+                                <p class="text-sm font-medium">Threshold: <span id="threshold-display" class="font-bold">-</span> dBm</p>
+                                <p class="text-sm font-medium">Pr Mean(dBm): <span id="pr-mean-display" class="font-bold">-</span></p>
+                                <p class="text-sm font-medium">Sigma: <span id="sigma-display" class="font-bold">-</span></p>
+                            </div>
+                            
 
-<script>
-  function setMaterial(material) {
-    const materials = {
-      Si: {
-        Nc: '2.78E19',
-        Nv: '9.84E18',
-        chi_s: '4.05',
-        Eg: '1.166 - (4.73E-4 * T * T) / (T + 636)'
-      },
-      Ge: {
-        Nc: '1.04E19',
-        Nv: '6.0E18',
-        chi_s: '4.0',
-        Eg: '0.7437 - (4.77E-4 * T * T) / (T + 235)'
-      },
-      GaAs: {
-        Nc: '4.45E17',
-        Nv: '7.72E18',
-        chi_s: '4.07',
-        Eg: '1.519 - (5.41E-4 * T * T) / (T + 204)'
-      }
-    };
-
-    const { Nc, Nv, chi_s, Eg } = materials[material];
-    data.Nc.value = Nc;
-    data.Nv.value = Nv;
-    data.chi_s.value = chi_s;
-    data.Eg.value = Eg;
-    moscap();
-  }
-
-  function setVoltage(value) {
-    data.V.value = value;
-    moscap();
-  }
-</script>
-
-<table align="center"><tbody><tr><td>
-
-<p style="text-align:center"><b>Band diagram</b></p>
-
-<table align="center">
-    <tbody>
-        <tr>
-            <td>
-                <p style="text-align:center;">Energy<br>[eV]</p>
-            </td>
-            <td>
-                <div id="placeholder1" style="width: 400px; height: 300px; position: relative;">
-                    <canvas class="flot-base" width="400" height="300"></canvas>
-                    <canvas class="flot-overlay" width="400" height="300" style="position: absolute; left: 0; top: 0;"></canvas>
-                    <div class="flot-text" style="position: absolute; inset: 0; font-size: smaller; color: #545454;">
-                        <div class="flot-x-axis xAxis" style="position: absolute; inset: 0; display: block;">
-                            <div class="flot-tick-label tickLabel" style="position: absolute; top: 282px; left: 62px; text-align: center;">0.00</div>
-                            <div class="flot-tick-label tickLabel" style="position: absolute; top: 282px; left: 138px; text-align: center;">0.05</div>
-                            <div class="flot-tick-label tickLabel" style="position: absolute; top: 282px; left: 214px; text-align: center;">0.10</div>
-                            <div class="flot-tick-label tickLabel" style="position: absolute; top: 282px; left: 290px; text-align: center;">0.15</div>
-                            <div class="flot-tick-label tickLabel" style="position: absolute; top: 282px; left: 366px; text-align: center;">0.20</div>
+                            <div class="input-box space-y-2 mb-4">
+                                <label class="block text-sm font-medium text-gray-700">Enter Area Coverage (%):</label>
+                                <input id="entered-prob-input" type="text" class="w-full rounded-md border-gray-300 shadow-sm p-1" placeholder="e.g., 71.71">
+                                <button id="check-btn" class="w-full bg-green-500 text-white font-bold py-1 rounded-lg hover:bg-green-600 transition duration-300 disabled:opacity-50" disabled>CHECK</button>
+                                <p id="check-result" class="text-center font-bold text-gray-800 mt-2"></p>
+                            </div>
                         </div>
-                        <div class="flot-y-axis yAxis" style="position: absolute; inset: 0; display: block;">
-                            <div class="flot-tick-label tickLabel" style="position: absolute; top: 269px; left: 2px; text-align: right;">-2.5</div>
-                            <div class="flot-tick-label tickLabel" style="position: absolute; top: 235px; left: 2px; text-align: right;">-2.0</div>
-                            <div class="flot-tick-label tickLabel" style="position: absolute; top: 202px; left: 2px; text-align: right;">-1.5</div>
-                            <div class="flot-tick-label tickLabel" style="position: absolute; top: 168px; left: 2px; text-align: right;">-1.0</div>
-                            <div class="flot-tick-label tickLabel" style="position: absolute; top: 135px; left: 2px; text-align: right;">-0.5</div>
-                            <div class="flot-tick-label tickLabel" style="position: absolute; top: 101px; left: 6px; text-align: right;">0.0</div>
-                            <div class="flot-tick-label tickLabel" style="position: absolute; top: 67px; left: 6px; text-align: right;">0.5</div>
-                            <div class="flot-tick-label tickLabel" style="position: absolute; top: 34px; left: 6px; text-align: right;">1.0</div>
-                            <div class="flot-tick-label tickLabel" style="position: absolute; top: 0; left: 6px; text-align: right;">1.5</div>
+                        
+                        
+                        <div class="space-y-2 self-end w-full">
+                            <button id="submit-area-btn" class="w-full bg-blue-500 text-white font-bold py-2 rounded-lg hover:bg-blue-600 transition duration-300 disabled:opacity-50" disabled>Submit</button>
+                            <button id="generate-report-btn" class="w-full bg-blue-500 text-white font-bold py-2 rounded-lg hover:bg-blue-600 transition duration-300 disabled:opacity-50" disabled>Generate Report</button>
                         </div>
                     </div>
-                    <div class="legend" style="position: absolute; top: 13px; right: 19px; background-color: rgba(255, 255, 255, 0.85);">
-                        <table style="font-size: smaller; color: #545454;">
-                            <tbody>
+                </div>
+
+                <div class="md:col-span-1 bg-gray-100 flex flex-col items-center p-4">
+                    <div class="relative w-full flex-grow flex items-center justify-center">
+                        <div id="simulation-display" class="relative w-full h-full rounded-lg overflow-hidden flex items-center justify-center">
+                            <img id="antenna" src="tower.png" alt="Base Station Antenna">
+                            <img id="mobile" src="mobile.png" alt="Mobile Device">
+                            <div id="mobile-tooltip" class="hidden"></div>
+                            <canvas id="simulation-canvas" class="absolute top-0 left-0 w-full h-full"></canvas>
+                        </div>
+                    </div>
+                    
+                    <div class="w-full mt-4 flex items-center justify-center space-x-2 bg-gray-200 p-2 rounded-lg">
+                        <button id="mobile-minus-btn" class="p-1 bg-gray-300 rounded-lg text-lg font-bold hover:bg-gray-400 transition disabled:opacity-50">-</button>
+                        <input id="mobile-slider" type="range" min="0" max="100" value="50" class="w-full h-2 bg-gray-400 rounded-lg appearance-none cursor-pointer">
+                        <button id="mobile-plus-btn" class="p-1 bg-gray-300 rounded-lg text-lg font-bold hover:bg-gray-400 transition disabled:opacity-50">+</button>
+                    </div>
+                    <p id="mobile-angle-display" class="mt-2 text-sm text-gray-600">Mobile Angle: <span id="current-angle" class="font-bold">180</span> deg</p>
+                    
+                    <div class="flex space-x-4 mt-2">
+                        <button id="take-reading-btn" class="bg-yellow-500 text-gray-800 font-bold py-1 px-4 rounded-lg hover:bg-yellow-600 transition duration-300 disabled:opacity-50">Take Reading</button>
+                        <button id="finish-btn" class="bg-red-500 text-white font-bold py-1 px-4 rounded-lg hover:bg-red-600 transition duration-300 disabled:opacity-50">FINISH</button>
+                    </div>
+                    <p id="reading-count-display" class="mt-2 text-sm font-medium text-gray-700">Readings: 0 / 40</p>
+                    <p class="mt-2 text-xs text-gray-500">VLS FCMC IIT Kharagpur</p>
+                </div>
+
+                <div class="md:col-span-1 p-4 flex flex-col">
+                    <h3 class="text-lg font-semibold mb-2 text-center">Pr(dBm) deg</h3>
+                    <div class="reading-table-container flex-grow">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="table-header">
                                 <tr>
-                                    <td class="legendColorBox" style="padding: 1px;">
-                                        <div style="border: 1px solid #ccc;">
-                                            <div style="width: 4px; height: 0; border: 5px solid rgb(255, 0, 0); overflow: hidden;"></div>
-                                        </div>
-                                    </td>
-                                    <td class="legendLabel">E<sub>c</sub></td>
+                                    <th class="px-2 py-1 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Sr.No</th>
+                                    <th class="px-2 py-1 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Pr(dBm)</th>
+                                    <th class="px-2 py-1 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">deg</th>
                                 </tr>
-                                <tr>
-                                    <td class="legendColorBox" style="padding: 1px;">
-                                        <div style="border: 1px solid #ccc;">
-                                            <div style="width: 4px; height: 0; border: 5px solid rgb(0, 0, 255); overflow: hidden;"></div>
-                                        </div>
-                                    </td>
-                                    <td class="legendLabel">E<sub>v</sub></td>
-                                </tr>
-                                <tr>
-                                    <td class="legendColorBox" style="padding: 1px;">
-                                        <div style="border: 1px solid #ccc;">
-                                            <div style="width: 4px; height: 0; border: 5px solid rgb(0, 0, 0); overflow: hidden;"></div>
-                                        </div>
-                                    </td>
-                                    <td class="legendLabel">E<sub>F</sub></td>
-                                </tr>
-                            </tbody>
+                            </thead>
+                            <tbody id="readings-table-body" class="bg-white divide-y divide-gray-200">
+                                </tbody>
                         </table>
                     </div>
                 </div>
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                <p style="text-align:center;"><i>x</i> [μm]</p>
-            </td>
-        </tr>
-    </tbody>
-</table>
-
-
-</td><td>
-
-  <div class="table-container">
-    <table>
-      <tbody>
-        <tr>
-          <td>
-            <p>
-              <span class="math">E<sub>g</sub> =</span>
-              <span id="Eg_txt" class="value">1.12</span>&nbsp;eV
-            </p>
-          </td>
-          <td>
-            <p>
-              <span class="math">n<sub>i</sub> =</span>
-              <span id="ni_txt" class="value">6.40e+9</span>&nbsp;1/cm³
-            </p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p>
-              <span class="math">E<sub>s</sub> =</span>
-              <span id="Es_txt" class="value">1.57e+7</span>&nbsp;V/m
-            </p>
-          </td>
-          <td>
-            <p>
-              <span class="math">V<sub>s</sub> =</span>
-              <span id="Vs_txt" class="value">0.831</span>&nbsp;V
-            </p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p>
-              <span class="math">Q =</span>
-              <span id="Q_txt" class="value">-0.00167</span>&nbsp;C/m²
-            </p>
-          </td>
-          <td>
-            <p>
-              <span class="math">n(x=0) =</span>
-              <span id="n0_txt" class="value">37.2</span>&nbsp;×&nbsp;10<sup>15</sup>&nbsp;1/cm³
-            </p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p>
-              <span class="math">E<sub>ox</sub> =</span>
-              <span id="Eox_txt" class="value">4.70e+7</span>&nbsp;V/m
-            </p>
-          </td>
-          <td>
-            <p>
-              <span class="math">V<sub>shoot</sub> =</span>
-              <span id="Vtmp_txt" class="value">0.0000221</span>&nbsp;V
-            </p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <div class="flex-container">
-              <span class="math">$$\phi_s =$$</span>
-              <span id="phi_s_txt" class="value">5.05</span> eV
             </div>
-          </td>
-          <td>
-            <div class="flex-container">
-              <span class="math">$$V_{fb} = \phi_m - \phi_s =$$</span>
-              <span id="Vfb_txt" class="value">-0.972</span> V
-            </div>
-          </td>
-        </tr>
-        <tr><td colspan="2">&nbsp;</td></tr>
-        <tr><td colspan="2"><p class="center-text">From the depletion approximation:</p></td></tr>
-        <tr>
-          <td>
-            <p>
-              <span class="math">max (x<sub>p</sub>) =</span>
-              <span id="xp_txt" class="value">0.107</span>&nbsp;μm
-            </p>
-          </td>
-          <td>
-            <p>
-              <span class="math">V<sub>T</sub> =</span>
-              <span id="VT_txt" class="value">0.0292</span>&nbsp;V
-            </p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p>
-              <span class="math">E<sub>s</sub> =</span>
-              <span id="Es0_txt" class="value">1.58e+7</span>&nbsp;V/m
-            </p>
-          </td>
-          <td>
-            <p>
-              <span class="math">V<sub>s</sub> =</span>
-              <span id="VIB0_txt" class="value">0.830</span>&nbsp;V
-            </p>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+        </div>
+    </div>
 
-</td></tr></tbody></table>
+    <script>
+        // Use a self-invoking function to avoid global scope pollution
+        (function() {
+            const state = {
+                userName: '',
+                readings: [],
+                prMean: null,
+                sigma: null,
+                mobileAngle: 180,
+                // These are parameters from the instructions and theory documents
+                txPower: 30.0, // dBm
+                distance: 3000, // meters
+                fc: 2.0, // GHz
+                threshold: -90.0, // dBm
+                d0: 100, // reference distance from theory.pdf
+                shadowFadingSigma: 9.0 // sigma value from instructions.pdf for calculation validation
+            };
+            
+            let isDragging = false;
 
+            // DOM elements
+            const startBtn = document.getElementById('start-btn');
+            const startScreen = document.getElementById('start-screen');
+            const mainControls = document.getElementById('main-controls');
+            const readingsTableBody = document.getElementById('readings-table-body');
+            const mobileSlider = document.getElementById('mobile-slider');
+            const mobileMinusBtn = document.getElementById('mobile-minus-btn');
+            const mobilePlusBtn = document.getElementById('mobile-plus-btn');
+            const currentAngleDisplay = document.getElementById('current-angle');
+            const takeReadingBtn = document.getElementById('take-reading-btn');
+            const readingCountDisplay = document.getElementById('reading-count-display');
+            const finishBtn = document.getElementById('finish-btn');
+            const prMeanDisplay = document.getElementById('pr-mean-display');
+            const sigmaDisplay = document.getElementById('sigma-display');
+            const enteredProbInput = document.getElementById('entered-prob-input');
+            const checkBtn = document.getElementById('check-btn');
+            const checkResultDisplay = document.getElementById('check-result');
+            
+            const submitAreaBtn = document.getElementById('submit-area-btn');
+            const generateReportBtn = document.getElementById('generate-report-btn');
+            
+            const resetBtn = document.getElementById('reset-btn');
+            const distInput = document.getElementById('dist-input');
+            const txPowerInput = document.getElementById('tx-power-input');
+            const fcInput = document.getElementById('fc-input');
+            const npInput = document.getElementById('np-input');
+            const thresholdDisplay = document.getElementById('threshold-display');
+            const calculatedValuesBox = document.getElementById('calculated-values-box');
+            
+            const simulationDisplay = document.getElementById('simulation-display');
+            const antennaElement = document.getElementById('antenna');
+            const mobileElement = document.getElementById('mobile');
+            const mobileTooltip = document.getElementById('mobile-tooltip');
+            
+            const canvas = document.getElementById('simulation-canvas');
+            const ctx = canvas.getContext('2d');
+            
+            const bgImage = new Image();
+            bgImage.src = 'bg.png';
+            const towerImage = new Image();
+            towerImage.src = 'tower.png';
+            const mobileImage = new Image();
+            mobileImage.src = 'mobile.png';
 
+            const customDialog = document.getElementById('custom-dialog');
+            const dialogTitle = document.getElementById('dialog-title');
+            const dialogMessage = document.getElementById('dialog-message');
+            const dialogInput = document.getElementById('dialog-input');
+            const dialogOkBtn = document.getElementById('dialog-ok');
+            const dialogCancelBtn = document.getElementById('dialog-cancel');
 
-</div>
-   <!--simulation end -->
-  	 
-</body><!--body tag end-->
-</html><!--html tag end-->
+            // --- Helper Functions ---
+
+            function showMessage(title, message, isPrompt = false, callback = () => {}) {
+                dialogTitle.textContent = title;
+                dialogMessage.textContent = message;
+                dialogInput.classList.add('hidden');
+                customDialog.classList.remove('hidden');
+                
+                if (isPrompt) {
+                    dialogInput.classList.remove('hidden');
+                    dialogMessage.classList.add('hidden');
+                    dialogCancelBtn.classList.remove('hidden');
+                    dialogInput.value = ''; 
+                    dialogOkBtn.onclick = () => {
+                        customDialog.classList.add('hidden');
+                        callback(dialogInput.value);
+                    };
+                    dialogCancelBtn.onclick = () => {
+                        customDialog.classList.add('hidden');
+                        callback(null);
+                    };
+                } else {
+                    dialogMessage.classList.remove('hidden');
+                    dialogInput.classList.add('hidden');
+                    dialogCancelBtn.classList.add('hidden');
+                    dialogOkBtn.onclick = () => {
+                        customDialog.classList.add('hidden');
+                        callback();
+                    };
+                }
+            }
+            
+            function erf(x) {
+                const a1 = 0.254829592;
+                const a2 = -0.284496736;
+                const a3 = 1.421413741;
+                const a4 = -1.453152027;
+                const a5 = 1.061405429;
+                const p = 0.3275911;
+
+                const sign = (x >= 0) ? 1 : -1;
+                x = Math.abs(x);
+
+                const t = 1.0 / (1.0 + p * x);
+                const y = 1.0 - (((((a5 * t + a4) * t) + a3) * t + a2) * t + a1) * t * Math.exp(-x * x);
+                return sign * y;
+            }
+
+            function roundTo(num, decimals) {
+                if (typeof num !== 'number' || isNaN(num)) return '-';
+                const multiplier = Math.pow(10, decimals);
+                return Math.round(num * multiplier) / multiplier;
+            }
+
+            function normalRand(mean, stdDev) {
+                let u = 0, v = 0;
+                while (u === 0) u = Math.random(); 
+                while (v === 0) v = Math.random();
+                const z = Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
+                return z * stdDev + mean;
+            }
+
+            function calculatePrd() {
+                const txPower = parseFloat(txPowerInput.value);
+                const distance = parseFloat(distInput.value);
+                const np = parseFloat(npInput.value);
+                
+                if (isNaN(txPower) || isNaN(distance) || isNaN(np) || distance <= 0) {
+                    return NaN;
+                }
+                
+                const meanPrd = txPower - (10 * np * Math.log10(distance / state.d0));
+                const shadowFading = normalRand(0, state.shadowFadingSigma);
+                let receivedPower = meanPrd + shadowFading;
+
+                return receivedPower;
+            }
+
+            // --- UI Rendering ---
+
+            function updateMobilePositionAndCircle() {
+                const simRect = simulationDisplay.getBoundingClientRect();
+                const centerX = simRect.width / 2;
+                const centerY = simRect.height * 0.7; 
+
+                const antennaHeight = antennaElement.clientHeight;
+                const towerTop = centerY - antennaHeight;
+                antennaElement.style.top = `${towerTop}px`;
+                
+                const currentDistance = parseFloat(distInput.value);
+                const baseOrbitRadius = Math.min(centerX, centerY) * 0.8;
+                let scaledOrbitRadius = baseOrbitRadius;
+                
+                if (!isNaN(currentDistance) && currentDistance > 0) {
+                    scaledOrbitRadius = (currentDistance / 3000) * baseOrbitRadius; // Calibrated for default 3000m
+                    scaledOrbitRadius = Math.max(baseOrbitRadius * 0.3, Math.min(baseOrbitRadius * 1.5, scaledOrbitRadius));
+                }
+
+                const rx = scaledOrbitRadius;
+                const ry = scaledOrbitRadius * 0.3; 
+                const angle = (mobileSlider.value / 100) * 360; 
+                state.mobileAngle = angle;
+                currentAngleDisplay.textContent = roundTo(state.mobileAngle, 1);
+                const angleRad = (angle - 90) * Math.PI / 180;
+                
+                const mobileX = centerX + rx * Math.cos(angleRad);
+                const mobileY = centerY + ry * Math.sin(angleRad);
+                
+                mobileElement.style.left = `${mobileX}px`;
+                mobileElement.style.top = `${mobileY}px`;
+
+                canvas.width = simRect.width;
+                canvas.height = simRect.height;
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.strokeStyle = '#FFFFFF';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.ellipse(centerX, centerY, rx, ry, 0, 0, 2 * Math.PI);
+                ctx.stroke();
+
+                const prd = calculatePrd();
+                
+                mobileTooltip.innerHTML = `Pr(dBm): ${roundTo(prd, 2)}<br>Deg: ${roundTo(state.mobileAngle, 1)}`;
+                mobileTooltip.style.left = `${mobileX}px`;
+                mobileTooltip.style.top = `${mobileY}px`;
+                mobileTooltip.classList.remove('hidden');
+            }
+
+            function updateReadingsTable() {
+                readingsTableBody.innerHTML = '';
+                state.readings.forEach((reading, index) => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td class="px-2 py-1 whitespace-nowrap text-sm font-medium text-gray-900">${index + 1}</td>
+                        <td class="px-2 py-1 whitespace-nowrap text-sm text-gray-500">${roundTo(reading.prDbm, 2)}</td>
+                        <td class="px-2 py-1 whitespace-nowrap text-sm text-gray-500">${roundTo(reading.angle, 1)}</td>
+                    `;
+                    readingsTableBody.appendChild(row);
+                });
+                readingCountDisplay.textContent = `Readings: ${state.readings.length} / 40`;
+            }
+
+            // --- Event Handlers ---
+            window.incrementInput = function(id, step) {
+                const input = document.getElementById(id);
+                if (input) {
+                    let value = parseFloat(input.value);
+                    if (!isNaN(value)) {
+                        value += step;
+                         if (id === 'dist-input') {
+                            input.value = value.toFixed(0);
+                        } else {
+                            input.value = value.toFixed(1);
+                        }
+                        input.dispatchEvent(new Event('input'));
+                    }
+                }
+            }
+            window.decrementInput = function(id, step) {
+                const input = document.getElementById(id);
+                if (input) {
+                    let value = parseFloat(input.value);
+                    if (!isNaN(value)) {
+                        value -= step;
+                        if (id === 'dist-input') {
+                            input.value = value.toFixed(0);
+                        } else {
+                            input.value = value.toFixed(1);
+                        }
+                        input.dispatchEvent(new Event('input'));
+                    }
+                }
+            }
+
+            function onStart() {
+                showMessage('What is your name?', 'Please enter your name to start the experiment.', true, (name) => {
+                    if (name) {
+                        state.userName = name;
+                        startScreen.classList.add('hidden');
+                        mainControls.classList.remove('hidden');
+                        updateMobilePositionAndCircle();
+                        takeReadingBtn.disabled = false;
+                        resetBtn.disabled = false;
+                    } else {
+                        showMessage('Experiment Canceled', 'You must enter a name to proceed.');
+                    }
+                });
+            }
+
+            function onTakeReading() {
+                if (state.readings.length < 40) {
+                    const currentAngle = state.mobileAngle;
+                    
+                    const prDbmString = mobileTooltip.innerHTML.split('Pr(dBm): ')[1].split('<')[0];
+                    const currentPrDbm = parseFloat(prDbmString);
+                    
+                    if (isNaN(currentPrDbm)) {
+                        showMessage('Reading Error', 'Cannot take a reading with invalid parameters. Please check your inputs.');
+                        return;
+                    }
+
+                    const newReading = { prDbm: currentPrDbm, angle: currentAngle };
+                    state.readings.push(newReading);
+                    updateReadingsTable();
+                    
+                    if (state.readings.length === 40) {
+                        takeReadingBtn.disabled = true;
+                        finishBtn.disabled = false;
+                        showMessage('Readings Complete', 'You have taken 40 readings. Please click FINISH.');
+                    }
+                }
+            }
+
+            function onFinish() {
+                if (state.readings.length === 0) {
+                    showMessage('Error', 'Please take at least one reading before finishing the experiment.');
+                    return;
+                }
+
+                const sum = state.readings.reduce((acc, curr) => acc + curr.prDbm, 0);
+                state.prMean = sum / state.readings.length;
+                
+                const varianceSum = state.readings.reduce((acc, curr) => acc + Math.pow(curr.prDbm - state.prMean, 2), 0);
+                state.sigma = Math.sqrt(varianceSum / state.readings.length);
+                
+                thresholdDisplay.textContent = roundTo(state.threshold, 2) + ' dBm';
+                prMeanDisplay.textContent = roundTo(state.prMean, 2) + ' dBm';
+                sigmaDisplay.textContent = roundTo(state.sigma, 2);
+                
+                calculatedValuesBox.classList.remove('hidden');
+                checkBtn.disabled = false;
+                showMessage('Calculation Done', 'Mean and Sigma values have been calculated. You can now check your area coverage value.');
+            }
+
+            function onCheck() {
+                const userProb = parseFloat(enteredProbInput.value);
+                if (isNaN(userProb)) {
+                    showMessage('Input Error', 'Please enter a valid number for Area Coverage.');
+                    return;
+                }
+
+                const sigma = state.sigma;
+                const np = parseFloat(npInput.value);
+
+                if (sigma === null || isNaN(sigma) || sigma <= 0 || isNaN(np)) {
+                    showMessage('Calculation Error', 'Cannot calculate Area Coverage. Please finish the experiment to get a valid Sigma, and ensure Path Loss Exponent (np) is a valid number.');
+                    return;
+                }
+                
+                // As per the example, area coverage calculation assumes ProbR_r=0.5 at the cell edge, which means a=0.
+                const a = 0; 
+                const b = (10 * np * Math.log10(Math.E)) / (sigma * Math.SQRT2);
+
+                if (isNaN(b) || b === 0) {
+                    showMessage('Calculation Error', 'Parameter "b" is invalid. Check sigma and np values.');
+                    return;
+                }
+                
+                // Area Coverage Formula from example for a=0: F_u = 0.5 * [1 + exp(1/b^2) * (1 - erf(1/b))] * 100
+                const computedAreaCoverage = 0.5 * (1 + Math.exp(1 / (b * b)) * (1 - erf(1 / b))) * 100;
+                const roundedComputedProb = roundTo(computedAreaCoverage, 2);
+                
+                let message = `Computed Area Coverage: ${roundedComputedProb}%.`;
+                let valuesMatch = false;
+
+                if (Math.abs(userProb - roundedComputedProb) < 0.1) {
+                    message += `\nYour entered value is correct!`;
+                    checkResultDisplay.classList.remove('text-red-500');
+                    checkResultDisplay.classList.add('text-green-500');
+                    valuesMatch = true;
+                } else {
+                    message += `\nYour entered value (${userProb}%) does not match. The correct value is ${roundedComputedProb}%.`;
+                    checkResultDisplay.classList.remove('text-green-500');
+                    checkResultDisplay.classList.add('text-red-500');
+                }
+                
+                // This implements your request:
+                submitAreaBtn.disabled = false;
+                generateReportBtn.disabled = true; // Ensure report button stays disabled
+                
+                showMessage('Check Result', message);
+            }
+
+            function onSubmitArea() {
+                // This implements your request:
+                generateReportBtn.disabled = false; // Report button is activated here
+                submitAreaBtn.disabled = true; // Disable itself after clicking
+                showMessage('Submitted', 'You can now generate the report.');
+            }
+
+            async function onGenerateReport() {
+                if (state.readings.length === 0) {
+                    showMessage('Error', 'Please perform the experiment first by taking readings.');
+                    return;
+                }
+                if (typeof window.jspdf === 'undefined' || typeof window.jspdf.jsPDF === 'undefined') {
+                    showMessage('Error', 'PDF library not loaded. Please try again or refresh the page.');
+                    return;
+                }
+
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF();
+                const now = new Date();
+                const formattedDate = now.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+                const formattedTime = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false });
+
+                let y = 20;
+                doc.setFontSize(18);
+                doc.text('Fading Channels & Mobile Communications', 10, y);
+                y += 7;
+                doc.setFontSize(12);
+                doc.text('IIT Kharagpur', 10, y);
+                y += 10;
+                doc.setFontSize(14);
+                doc.text('Exp 4: Boundary Coverage', 10, y);
+                y += 7;
+                doc.text(`Date: ${formattedDate} ${formattedTime}`, 10, y);
+                y += 7;
+                doc.text(`Name: ${state.userName}`, 10, y);
+                y += 15;
+
+                const paramHeaders = ['Tx.Power', 'Dist', 'fc', 'np', 'Pr(Th)', 'Pr(Mean)', 'Sigma', 'Calc. Area Cov(%)', 'Entered Area Cov.(%)'];
+                
+                const np = parseFloat(npInput.value);
+                const b = (10 * np * Math.log10(Math.E)) / (state.sigma * Math.SQRT2);
+                const calculatedAreaCoverage = 0.5 * (1 + Math.exp(1 / (b * b)) * (1 - erf(1 / b))) * 100;
+                
+                const paramData = [[
+                    `${txPowerInput.value} dBm`,
+                    `${distInput.value} m`,
+                    `${fcInput.value} GHz`,
+                    `${npInput.value}`,
+                    `${state.threshold} dBm`,
+                    `${roundTo(state.prMean, 2)}`,
+                    `${roundTo(state.sigma, 2)}`,
+                    `${roundTo(calculatedAreaCoverage, 2)} %`,
+                    `${enteredProbInput.value} %`
+                ]];
+
+                doc.autoTable({
+                    startY: y,
+                    head: [paramHeaders],
+                    body: paramData,
+                    styles: { fontSize: 8, cellPadding: 2, overflow: 'linebreak' },
+                    headStyles: { fillColor: [200, 200, 200], textColor: [0, 0, 0] },
+                });
+                
+                y = doc.autoTable.previous.finalY + 10;
+                const readingsHeaders = ['Sr.No', 'Pr(dBm)', 'Angle(deg)'];
+                const readingsData = state.readings.map((r, i) => [i + 1, roundTo(r.prDbm, 2), roundTo(r.angle, 1)]);
+
+                doc.autoTable({ startY: y, head: [readingsHeaders], body: readingsData, styles: { fontSize: 8, cellPadding: 1, overflow: 'linebreak' }, headStyles: { fillColor: [200, 200, 200], textColor: [0, 0, 0] } });
+
+                const finalY = doc.internal.pageSize.height - 30;
+                doc.setFontSize(12);
+                doc.text('(Signature of the Candidate)', 10, finalY);
+                doc.text('(Signature of Faculty)', doc.internal.pageSize.width - 70, finalY);
+                doc.save('BoundaryCoverage_Report.pdf');
+                showMessage('Report Generated', 'Your report has been generated successfully and downloaded as a PDF.');
+            }
+
+            function onReset() {
+                state.readings = [];
+                state.prMean = null;
+                state.sigma = null;
+                state.mobileAngle = 180;
+                mobileSlider.value = 50;
+
+                distInput.value = "3000";
+                txPowerInput.value = "30.0";
+                fcInput.value = "2.0";
+                npInput.value = "3.0";
+
+                updateReadingsTable();
+                prMeanDisplay.textContent = '-';
+                sigmaDisplay.textContent = '-';
+                thresholdDisplay.textContent = '-';
+                enteredProbInput.value = '';
+                checkResultDisplay.textContent = '';
+                takeReadingBtn.disabled = false;
+                finishBtn.disabled = true;
+                checkBtn.disabled = true;
+                
+                submitAreaBtn.disabled = true;
+                generateReportBtn.disabled = true;
+                
+                updateMobilePositionAndCircle();
+                calculatedValuesBox.classList.add('hidden');
+                showMessage('Reset', 'The experiment has been reset. You can start over.');
+            }
+
+            mobileElement.addEventListener('mousedown', (e) => { isDragging = true; mobileElement.style.cursor = 'grabbing'; });
+            window.addEventListener('mouseup', () => { isDragging = false; mobileElement.style.cursor = 'grab'; });
+
+            window.addEventListener('mousemove', (e) => {
+                if (isDragging) {
+                    const simRect = simulationDisplay.getBoundingClientRect();
+                    const centerX = simRect.width / 2;
+                    const centerY = simRect.height * 0.7; 
+                    const mouseX = e.clientX - simRect.left;
+                    const mouseY = e.clientY - simRect.top;
+                    let angleRad = Math.atan2(mouseY - centerY, mouseX - centerX);
+                    let angleDeg = (angleRad * 180 / Math.PI + 90 + 360) % 360; 
+                    state.mobileAngle = angleDeg;
+                    mobileSlider.value = (angleDeg / 360) * 100;
+                    updateMobilePositionAndCircle();
+                }
+            });
+
+            function onParamInputChange() { updateMobilePositionAndCircle(); }
+            function onMobileSliderChange() { updateMobilePositionAndCircle(); }
+            function onMobilePlus() { let c = parseInt(mobileSlider.value); if (c < 100) { mobileSlider.value = c + 1; updateMobilePositionAndCircle(); } }
+            function onMobileMinus() { let c = parseInt(mobileSlider.value); if (c > 0) { mobileSlider.value = c - 1; updateMobilePositionAndCircle(); } }
+            
+            let imagesLoaded = 0;
+            const imagesToLoad = 3;
+            function onAllImagesLoaded() { if (++imagesLoaded === imagesToLoad) init(); }
+            bgImage.onload = onAllImagesLoaded;
+            towerImage.onload = onAllImagesLoaded;
+            mobileImage.onload = onAllImagesLoaded;
+            
+            function resizeSimulationDisplay() {
+                const parentDiv = simulationDisplay.parentElement;
+                const size = Math.min(parentDiv.clientWidth, parentDiv.clientHeight);
+                simulationDisplay.style.width = `${size}px`;
+                simulationDisplay.style.height = `${size}px`;
+                updateMobilePositionAndCircle();
+            }
+
+            function init() {
+                resizeSimulationDisplay();
+                window.addEventListener('resize', resizeSimulationDisplay);
+                
+                startBtn.addEventListener('click', onStart);
+                takeReadingBtn.addEventListener('click', onTakeReading);
+                finishBtn.addEventListener('click', onFinish);
+                checkBtn.addEventListener('click', onCheck);
+                
+                submitAreaBtn.addEventListener('click', onSubmitArea);
+                generateReportBtn.addEventListener('click', onGenerateReport);
+                
+                resetBtn.addEventListener('click', onReset);
+                mobileSlider.addEventListener('input', onMobileSliderChange);
+                mobilePlusBtn.addEventListener('click', onMobilePlus);
+                mobileMinusBtn.addEventListener('click', onMobileMinus);
+                distInput.addEventListener('input', onParamInputChange);
+                txPowerInput.addEventListener('input', onParamInputChange);
+                fcInput.addEventListener('input', onParamInputChange);
+                npInput.addEventListener('input', onParamInputChange);
+            }
+        })();
+    </script>
+</body>
+</html>
