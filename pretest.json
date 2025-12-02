@@ -1,0 +1,116 @@
+  {
+	  "version": 2.0,
+  "questions": [
+    {
+    "question": "1. What does 'boundary coverage probability' primarily quantify?",
+    "answers": {
+      "a": "The total area of the cell.",
+      "b": "The likelihood that a signal at the cell edge is above a specific quality threshold.",
+      "c": "The average signal strength within the entire cell.",
+      "d": "The number of users who can connect to the base station."
+    },
+    "correctAnswer": "b",
+    "difficulty": "beginner"
+  },
+  {
+    "question": "2. Which two factors are most important for determining boundary coverage probability?",
+    "answers": {
+      "a": "Time of day and network traffic.",
+      "b": "Signal frequency and data speed.",
+      "c": "Average pathloss and shadow fading.",
+      "d": "User device battery life and antenna size."
+    },
+    "correctAnswer": "c",
+    "difficulty": "beginner"
+  },
+  {
+    "question": "3. What does 'shadow fading' represent in propagation models?",
+    "answers": {
+      "a": "The signal loss from traveling a long distance.",
+      "b": "Random signal variations caused by large obstacles like buildings or hills.",
+      "c": "Interference from other base stations.",
+      "d": "The signal getting stronger at night."
+    },
+    "correctAnswer": "b",
+    "difficulty": "medium"
+  },
+  {
+    "question": "4. How does a *higher* (stricter) signal quality threshold affect the boundary coverage probability?",
+    "answers": {
+      "a": "It increases the probability.",
+      "b": "It decreases the probability.",
+      "c": "It does not change the probability, only the cell size.",
+      "d": "It makes the signal strength more random."
+    },
+    "correctAnswer": "b",
+    "difficulty": "easy"
+  },
+  {
+    "question": "5. If the pathloss exponent is *larger*, how does this generally impact the signal at the cell boundary?",
+    "answers": {
+      "a": "The signal strength drops more slowly with distance.",
+      "b": "The signal strength drops more quickly with distance.",
+      "c": "The signal strength becomes more stable.",
+      "d": "The pathloss exponent does not affect signal strength, only shadowing does."
+    },
+    "correctAnswer": "b",
+    "difficulty": "medium"
+  },
+  {
+    "question": "6. What does a *larger* standard deviation (sigma) for shadowing imply?",
+    "answers": {
+      "a": "The signal strength is very consistent and predictable.",
+      "b": "The signal strength is very reliable at the cell edge.",
+      "c": "The signal strength experiences greater random variations.",
+      "d": "The cell's radius is guaranteed to be larger."
+    },
+    "correctAnswer": "c",
+    "difficulty": "medium"
+  },
+  {
+    "question": "7. Why is coverage described as a probability instead of a certainty?",
+    "answers": {
+      "a": "Because the user's location is never known exactly.",
+      "b": "Because the data speed is always changing.",
+      "c": "Because of the random and unpredictable nature of shadow fading.",
+      "d": "Because the base station power is not constant."
+    },
+    "correctAnswer": "c",
+    "difficulty": "beginner"
+  },
+  {
+    "question": "8. What is the relationship between 'area coverage' and 'boundary coverage'?",
+    "answers": {
+      "a": "They are the same thing.",
+      "b": "Area coverage is the average probability over the whole cell, while boundary coverage is the probability at the cell edge.",
+      "c": "Area coverage is only for indoor cells, boundary coverage is for outdoor.",
+      "d": "Boundary coverage is always higher than area coverage."
+    },
+    "correctAnswer": "b",
+    "difficulty": "medium"
+  },
+  {
+    "question": "9. A 'fade margin' is extra signal power included in the design to...",
+    "answers": {
+      "a": "increase the data speed for all users.",
+      "b": "overcome random signal drops from shadowing and ensure the desired coverage probability.",
+      "c": "reduce the physical size of the base station antenna.",
+      "d": "make the signal travel a farther distance."
+    },
+    "correctAnswer": "b",
+    "difficulty": "hard"
+  },
+  {
+    "question": "10. Shadow fading is typically modeled using which statistical distribution?",
+    "answers": {
+      "a": "A uniform distribution.",
+      "b": "A linear distribution.",
+      "c": "A log-normal distribution.",
+      "d": "An exponential distribution."
+    },
+    "correctAnswer": "c",
+    "difficulty": "hard"
+  }
+
+  ]
+}

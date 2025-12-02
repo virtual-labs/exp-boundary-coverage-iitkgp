@@ -1,0 +1,118 @@
+
+  {
+	  "version": 2.0,
+  "questions": [
+   {
+    "question": "1. In the context of cell design, what is a primary consequence of *increasing* the pathloss exponent?",
+    "answers": {
+      "a": "The signal strength at the boundary increases.",
+      "b": "The signal strength at the boundary decreases.",
+      "c": "The effect of shadowing is eliminated.",
+      "d": "The cell coverage becomes more circular."
+    },
+    "correctAnswer": "b",
+    "difficulty": "medium"
+  },
+  {
+    "question": "2. A 'log-normal' distribution is used to model shadowing because...",
+    "answers": {
+      "a": "signal strength is always a positive value.",
+      "b": "the random variations are measured in decibels, which is a logarithmic scale.",
+      "c": "it's the simplest possible distribution.",
+      "d": "it only applies to indoor environments."
+    },
+    "correctAnswer": "b",
+    "difficulty": "hard"
+  },
+  {
+    "question": "3. If a cell is designed for 90% boundary coverage probability, what does this mean?",
+    "answers": {
+      "a": "90% of the cell area has perfect signal.",
+      "b": "A user at the cell edge will have an acceptable signal 90% of the time or at 90% of locations.",
+      "c": "The data speed will be at 90% of its maximum.",
+      "d": "Only 10% of users can connect at the boundary."
+    },
+    "correctAnswer": "b",
+    "difficulty": "medium"
+  },
+  {
+    "question": "4. What is the 'sensitivity level' or 'threshold' (gamma) used in coverage calculations?",
+    "answers": {
+      "a": "The maximum power the base station can transmit.",
+      "b": "The average power received by all users.",
+      "c": "The minimum signal strength required for acceptable service quality.",
+      "d": "The amount of interference from other cells."
+    },
+    "correctAnswer": "c",
+    "difficulty": "beginner"
+  },
+  {
+    "question": "5. How does a *larger* fade margin impact boundary coverage probability?",
+    "answers": {
+      "a": "It increases the probability.",
+      "b": "It decreases the probability.",
+      "c": "It has no effect on the probability.",
+      "d": "It makes the signal quality worse."
+    },
+    "correctAnswer": "a",
+    "difficulty": "medium"
+  },
+  {
+    "question": "6. 'Area coverage' probability is generally...?",
+    "answers": {
+      "a": "Lower than the boundary coverage probability.",
+      "b": "Higher than the boundary coverage probability.",
+      "c": "Exactly the same as the boundary coverage probability.",
+      "d": "Calculated without considering pathloss."
+    },
+    "correctAnswer": "b",
+    "difficulty": "medium"
+  },
+  {
+    "question": "7. If two locations are at the same distance from a base station, why might they have different signal strengths?",
+    "answers": {
+      "a": "Due to different pathloss exponents at each location.",
+      "b": "Due to different levels of shadow fading from local obstacles.",
+      "c": "Because the base station transmits at different power levels.",
+      "d": "This is not possible; they must have the same signal strength."
+    },
+    "correctAnswer": "b",
+    "difficulty": "beginner"
+  },
+  {
+    "question": "8. What is the main purpose of calculating the pathloss exponent and shadow fading variance from measurements?",
+    "answers": {
+      "a": "To create statistical models that can predict large-scale propagation.",
+      "b": "To determine the exact speed of the radio waves.",
+      "c": "To choose the frequency for the base station.",
+      "d": "To count the number of obstacles in the area."
+    },
+    "correctAnswer": "a",
+    "difficulty": "medium"
+  },
+  {
+    "question": "9. A 'circular coverage region' is defined by a radius where the...?",
+    "answers": {
+      "a": "signal is perfect and never drops.",
+      "b": "shadow fading is zero.",
+      "c": "mean signal level is above a threshold with a certain probability.",
+      "d": "interference is at its maximum."
+    },
+    "correctAnswer": "c",
+    "difficulty": "beginner"
+  },
+  {
+    "question": "10. If the standard deviation (sigma) of shadowing is zero, what would this imply?",
+    "answers": {
+      "a": "The signal strength is perfectly predictable by the pathloss model alone.",
+      "b": "There is no signal at all.",
+      "c": "The cell has an infinite radius.",
+      "d": "The signal is random everywhere."
+    },
+    "correctAnswer": "a",
+    "difficulty": "hard"
+  }
+
+
+  ]
+}
